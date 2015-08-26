@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<link rel='stylesheet' href='/bootstrap/dist/css/bootstrap.min.css'>
+    <script type="text/javascript" src="/javascripts/jquery-ui-1.10.4.custom/js/jquery-1.10.2.js"></script>
+    <script type="text/javascript" src="/javascripts/jquery-ui-1.11.4.custom/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="/javascripts/ol.js"></script>
+    <script type="text/javascript" src="/bootstrap/dist/js/bootstrap.min.js"></script>
+    <link rel='stylesheet' href='/stylesheets/style.css'>
+    <link rel="stylesheet" href="/stylesheets/ol.css" type="text/css">
+    <link rel="stylesheet" type="text/css" href="/stylesheets/samples.css">
+
+<title>Insert title here</title>
+</head>
+<body>
+	<ul class="list-group" id="list"></ul>		
+	<button type="button" onclick="yearDown();" class="btn btn-default" aria-label="Left Align"> 
+		<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+	</button>
+	<button id="year" type="button" class="btn btn-default" aria-label="Left Align" onclick="sendYearFilter()"> 1800</button>
+	<button type="button" onclick="yearUp();" class="btn btn-default" aria-label="Left Align"> 
+		<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+	</button>
+	<button type="button" onclick="setZoom('down');" class="btn btn-default" aria-label="Left Align"> 
+		<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+	</button>
+	<button id="zoom" type="button" class="btn btn-default" aria-label="Left Align" onclick="sendZoom()"> 1</button>
+	<button type="button" onclick="setZoom('up');" class="btn btn-default" aria-label="Left Align"> 
+		<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+	</button>
+
+
+		
+</body>
+
+
+	<script type="text/javascript">	  
+		var yearDown = function(){
+			var year = $('#year').text();
+			year = parseInt(year);
+			year--;
+			$('#year').text(year);			
+			getDataByYear(year);
+		}
+		var yearUp = function(){
+			var year = $('#year').text();
+			year = parseInt(year);
+			year++;
+			$('#year').text(year);
+			getDataByYear(year);
+		}
+		var setZoom = function(upOrDown){
+			var zoom = $('#zoom').text();
+			zoom = parseInt(zoom);
+			if(upOrDown.indexOf('down') > -1){
+				zoom--;
+			}else{
+				zoom++;
+			}			
+			$('#zoom').text(zoom);			
+		}
+		var sendFlyTo = function(x,y){
+			$.get("/flyTo?x="+x+"&y="+y, function(data, status){
+				//	alert("Data: " + data.x +" "+data.y+" "+data.sended +"\nStatus: " + status);
+			});	
+		}
+		var sendYearFilter = function(){
+			var year = $('#year').text();
+			year = parseInt(year);
+			$.get("/yearFilter?year="+year, function(data, status){});
+
+		}
+		var sendZoom = function(){
+			var zoom = $('#zoom').text();
+			zoom = parseInt(zoom);
+			$.get("/zoom?zoom="+zoom, function(data, status){});
+
+		}
+
+		var getDataByYear = function(year){			
+			$.get("/db/getDataByYear?year="+year, function(data, status){
+				console.log(data);
+				$('#list').empty()
+				data.forEach(function(data){
+					var item = "<li class='list-group-item list-group-item-success' onclick='sendFlyTo("+data.coordenadas+")'>"+ data.titulo 
+					item += "<button type='button' class='btn btn-default' aria-label='Left Align'>";
+					item += "<span class='glyphicon glyphicon-send' aria-hidden='true'></span>";
+					item += "</button>";
+					item +="</li>";
+					$('#list').append(item);
+				});
+			});
+		}
+	</script>
+</html>

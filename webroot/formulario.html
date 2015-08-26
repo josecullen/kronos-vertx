@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<link rel='stylesheet' href='/bootstrap/dist/css/bootstrap.min.css'>
+<script type="text/javascript"
+	src="/javascripts/jquery-ui-1.10.4.custom/js/jquery-1.10.2.js"></script>
+<script type="text/javascript"
+	src="/javascripts/jquery-ui-1.11.4.custom/jquery-ui.min.js"></script>
+<script type="text/javascript" src="/javascripts/ol.js"></script>
+<script type="text/javascript" src="/bootstrap/dist/js/bootstrap.min.js"></script>
+<link rel='stylesheet' href='/stylesheets/style.css'>
+<link rel="stylesheet" href="/stylesheets/ol.css" type="text/css">
+<link rel="stylesheet" type="text/css" href="/stylesheets/samples.css">
+
+<title>Insert title here</title>
+</head>
+<body>
+	<form action="/db/add" method="GET" class="navbar-form navbar-left">
+		<div class="input-group" style="width: 100%">
+			<span class="input-group-addon" id="basic-addon1">Título</span> <input
+				type="text" name="titulo" class="form-control"
+				placeholder="Batalla de San Lorenzo" aria-describedby="basic-addon1">
+		</div>
+		<p></p>
+		<div class="input-group" style="width: 100%">
+			<span class="input-group-addon" id="basic-addon1">Fecha</span> <input
+				type="date" name="fecha" class="form-control" placeholder=""
+				aria-describedby="basic-addon1">
+		</div>
+		<p></p>
+		<div class="input-group">
+			<span class="input-group-addon" id="basic-addon1">Coordenadas</span>
+			<input type="number" id="x" name="coordenadaX" step="0.01"
+				class="form-control" placeholder="37,35"
+				aria-describedby="basic-addon1"> <span
+				class="input-group-addon" id="basic-addon1">x</span> <input
+				type="number" id="y" name="coordenadaY" step="0.01"
+				class="form-control" placeholder="15,48"
+				aria-describedby="basic-addon1"> <span
+				class="input-group-addon" id="basic-addon1">y</span>
+		</div>
+		<p></p>
+		<div class="input-group" style="width: 100%">
+			<span class="input-group-addon" id="basic-addon1">Contenido</span>
+			<textarea class="form-control" name="contenido" rows="8"
+				aria-describedby="basic-addon1"></textarea>
+		</div>
+		<p>
+		<div class="input-group" style="width: 100%">
+			<span class="input-group-addon" id="basic-addon1">Contenido</span>
+			<div class="dropdown">
+				<button type="button" name="categoria"
+					class="btn btn-primary dropdown-toggle" data-toggle="dropdown">Categoría</button>
+				<span class="caret"></span>
+				<ul class="dropdown-menu">
+					<li><a href="#">Historia</a></li>
+					<li><a href="#">Música</a></li>
+					<li><a href="#">Geografía</a></li>
+				</ul>
+			</div>
+		</div>
+		<p></p>
+		<button type="submit" class="btn btn-default">Submit</button>
+		<div id="map" class="map"></div>
+		<div id="overlay"
+			style="background-color: white; border-radius: 10px; border: 1px solid black; padding: 5px 10px;"></div>
+	</form>
+
+
+
+</body>
+
+<script type="text/javascript">
+	var layer = new ol.layer.Tile({
+		source : new ol.source.OSM()
+	});
+
+	var center = ol.proj.transform([ -60, -31 ], 'EPSG:4326', 'EPSG:3857');
+	var overlay = new ol.Overlay({
+		element : document.getElementById('overlay'),
+		positioning : 'bottom-center'
+	});
+
+	var view = new ol.View({
+		center : center,
+		zoom : 6
+	});
+
+	var map = new ol.Map({
+		target : 'map',
+		layers : [ layer ],
+		view : view
+	});
+
+	// register an event handler for the click event
+	map.on('click', function(event) {
+		// extract the spatial coordinate of the click event in map projection units
+		var coord = event.coordinate;
+		// transform it to decimal degrees
+		var degrees = ol.proj.transform(coord, 'EPSG:3857', 'EPSG:4326');
+		// format a human readable version
+		console.log('degrees ' + degrees);
+		var hdms = ol.coordinate.toStringXY(degrees, 2);
+		// update the overlay element's content
+		$('#x').val(hdms.split(',')[0]);
+		$('#y').val(hdms.split(',')[1].trim());
+
+		var element = overlay.getElement();
+		element.innerHTML = hdms;
+		// position the element (using the coordinate in the map's projection)
+		overlay.setPosition(coord);
+		// and add it to the map
+		map.addOverlay(overlay);
+	});
+</script>
+</html>
