@@ -3,7 +3,9 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import javafx.application.Application;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import javax.persistence.EntityManager;
@@ -17,7 +19,13 @@ import javax.persistence.Persistence;
 
 
 
+
+
+
 import org.apache.commons.beanutils.converters.CalendarConverter;
+
+
+
 
 
 
@@ -56,9 +64,9 @@ public class EmbeddedServer extends Application{
 	public void start(Stage primaryStage) throws Exception {
 		Scene scene = new Scene(new Menu(),1200,800);
 		primaryStage.setScene(scene);
+		maximize(primaryStage);
 		primaryStage.show();
-		
-		
+
 		Vertx vertx = Vertx.vertx();
 		HttpServer server = vertx.createHttpServer();
 				
@@ -117,6 +125,18 @@ public class EmbeddedServer extends Application{
 		
 		
 	}
+  	
+  	private void maximize(Stage stage){
+		Screen screen = Screen.getPrimary();
+
+		Rectangle2D bounds = screen.getVisualBounds();
+
+		stage.setX(bounds.getMinX());
+		stage.setY(bounds.getMinY());
+		stage.setWidth(bounds.getWidth());
+		stage.setHeight(bounds.getHeight());
+	}
+	
   	
   	
 }

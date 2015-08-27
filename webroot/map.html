@@ -15,7 +15,13 @@
 <title>Insert title here</title>
 </head>
 <body>
-  <div id="map" class="map"></div>   
+  	<div id="map" class="map"></div>  
+<!--   	<div class="btn-group" data-toggle="buttons"> -->
+	  	<label class="btn btn-primary active">
+	    	<input id="srcLocal" type="checkbox" onclick='changeMapSrc(this);' checked> Mapas Locales
+	  	</label>
+<!-- 	</div> -->
+   
   <script type="text/javascript">	  
       var osmLayer = new ol.layer.Tile({
         source: new ol.source.OSM()
@@ -26,9 +32,7 @@
         zoom: 1
       });
       var map = new ol.Map({
-      //	renderer: 'dom',
         target: 'map',
-       // layers: [osmLayer],
         view: view
       });     
 
@@ -37,7 +41,21 @@
           url: '/images/osm/{z}/{x}/{y}.png'
         })
       });
+      map.addLayer(osmLayer);
       map.addLayer(newLayer);
+      
+      function changeMapSrc(cb){
+      	if(cb.checked){
+      		newLayer.setVisible(true);
+      		osmLayer.setVisible(false);
+      	}else{
+      		newLayer.setVisible(false);
+      		osmLayer.setVisible(true);
+      	}
+      }
+      
+      
+      
       window.onload = function(){
         getUpdate();
       }
