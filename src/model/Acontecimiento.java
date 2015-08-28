@@ -1,10 +1,8 @@
 package model;
 
 import java.io.Serializable;
-
 import javax.persistence.*;
-
-import java.util.Calendar;
+import java.util.List;
 
 
 /**
@@ -16,6 +14,12 @@ import java.util.Calendar;
 public class Acontecimiento implements Serializable {
 	private static final long serialVersionUID = 1L;
 
+	@Id
+	@SequenceGenerator(name="ACONTECIMIENTO_ID_GENERATOR", sequenceName="SEQ_ACONTECIMIENTO_ID")
+	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="ACONTECIMIENTO_ID_GENERATOR")
+	@Column(name="ID")
+	private long id;
+	
 	private String contenido;
 
 	@Column(name="COORD_X")
@@ -23,19 +27,45 @@ public class Acontecimiento implements Serializable {
 
 	@Column(name="COORD_Y")
 	private double coordY;
-
-	@Temporal(TemporalType.DATE)
-	private Calendar fecha;
 	
-	@Id
-	@SequenceGenerator(name="ACONTECIMIENTO_ID_GENERATOR", sequenceName="SEQ_ACONTECIMIENTO_ID")
-	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="ACONTECIMIENTO_ID_GENERATOR")
-	@Column(name="ID")
-	private long id;
+	private int año;
+
+	private int dia;
+
+	private int mes;
 
 	private String titulo;
 
+	//bi-directional many-to-many association to LineaDeTiempo
+	@ManyToMany
+	@JoinTable(
+		name="LINEA_ACONTECIMIENTO"
+		, joinColumns={
+			@JoinColumn(name="ACONTECIMIENTO_ID", referencedColumnName="ID")
+			}
+		, inverseJoinColumns={
+			@JoinColumn(name="LINEA_ID", referencedColumnName="ID")
+			}
+		)
+	private List<LineaDeTiempo> lineaDeTiempos;
+
 	public Acontecimiento() {
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	public int getAño() {
+		return this.año;
+	}
+
+	public void setAño(int año) {
+		this.año = año;
 	}
 
 	public String getContenido() {
@@ -62,20 +92,20 @@ public class Acontecimiento implements Serializable {
 		this.coordY = coordY;
 	}
 
-	public Calendar getFecha() {
-		return this.fecha;
+	public int getDia() {
+		return this.dia;
 	}
 
-	public void setFecha(Calendar fecha) {
-		this.fecha = fecha;
+	public void setDia(int dia) {
+		this.dia = dia;
 	}
 
-	public long getId() {
-		return this.id;
+	public int getMes() {
+		return this.mes;
 	}
 
-	public void setId(long id) {
-		this.id = id;
+	public void setMes(int mes) {
+		this.mes = mes;
 	}
 
 	public String getTitulo() {
@@ -84,6 +114,14 @@ public class Acontecimiento implements Serializable {
 
 	public void setTitulo(String titulo) {
 		this.titulo = titulo;
+	}
+
+	public List<LineaDeTiempo> getLineaDeTiempos() {
+		return this.lineaDeTiempos;
+	}
+
+	public void setLineaDeTiempos(List<LineaDeTiempo> lineaDeTiempos) {
+		this.lineaDeTiempos = lineaDeTiempos;
 	}
 
 }

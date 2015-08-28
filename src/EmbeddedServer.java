@@ -1,41 +1,21 @@
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
 
-
-
-
-
-
-
-
-
-
-
-
-import org.apache.commons.beanutils.converters.CalendarConverter;
-
-
-
-
-
-
-
-
-
 import model.Acontecimiento;
-import model.ManoDeObra;
 import service.AcontecimientoService;
-import service.ManoDeObraService;
 import view.Menu;
 import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpServer;
@@ -51,7 +31,6 @@ public class EmbeddedServer extends Application{
 	
 	static javax.persistence.EntityManagerFactory emf = Persistence.createEntityManagerFactory("VertxJPA");
 	static EntityManager em = emf.createEntityManager(); 
-	static ManoDeObraService<ManoDeObra> mdoService = new ManoDeObraService<ManoDeObra>(em);
 	static AcontecimientoService acontService = new AcontecimientoService(em);
 	static int i = 0;
 
@@ -66,7 +45,15 @@ public class EmbeddedServer extends Application{
 		primaryStage.setScene(scene);
 		maximize(primaryStage);
 		primaryStage.show();
+		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 
+			@Override
+			public void handle(WindowEvent event) {
+				Platform.exit();
+                System.exit(0);				
+			}
+		});
+		
 		Vertx vertx = Vertx.vertx();
 		HttpServer server = vertx.createHttpServer();
 				
@@ -75,14 +62,8 @@ public class EmbeddedServer extends Application{
 		Route routeDBTest = router.route("/dbtest").handler(routingContext -> {
 			HttpServerResponse response = routingContext.response();
 			response.putHeader("content-type", "text/plain");
-			em.getTransaction().begin();
-			mdoService.create("nuevo"+i);
-			em.getTransaction().commit();
-			em.getTransaction().begin();
-			ManoDeObra mdo = mdoService.find("nuevo"+i);
-			em.getTransaction().commit();
 			i++;
-			routingContext.response().end(mdo.getNombre());
+			routingContext.response().end();
 		});
 		
 		
@@ -101,9 +82,14 @@ public class EmbeddedServer extends Application{
 			acontecimiento.setCoordX(x);
 			acontecimiento.setCoordY(y);
 			
-			String fecha[] = routingContext.request().getParam("fecha").split("-");
-			Calendar date = new GregorianCalendar(Integer.parseInt(fecha[0]), Integer.parseInt(fecha[1]), Integer.parseInt(fecha[2]));
-			acontecimiento.setFecha(date);
+			int dia = Integer.parseInt(routingContext.request().getParam("dia"));
+			int mes = Integer.parseInt(routingContext.request().getParam("mes"));
+			int año = Integer.parseInt(routingContext.request().getParam("ano"));
+			
+			acontecimiento.setAño(año);
+			acontecimiento.setMes(mes);
+			acontecimiento.setDia(dia);
+			
 			
 			em.getTransaction().commit();
 			

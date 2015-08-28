@@ -6,7 +6,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
 import model.Acontecimiento;
-import model.ManoDeObra;
 
 public class AcontecimientoService implements BasicServiceInterface<Acontecimiento> {
 	EntityManager em;
