@@ -1,7 +1,10 @@
 package model;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
+
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -54,6 +57,13 @@ public class LineaDeTiempo implements Serializable {
 
 	public void setTitulo(String titulo) {
 		this.titulo = titulo;
+	}
+	
+	public void addAcontecimiento(Acontecimiento acontecimiento){
+//		if(acontecimientos == null){
+//			acontecimientos = new ArrayList<Acontecimiento>();
+//		}
+		this.acontecimientos.add(acontecimiento);
 	}
 
 	public List<Acontecimiento> getAcontecimientos() {

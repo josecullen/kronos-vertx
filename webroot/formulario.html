@@ -1,78 +1,171 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="ISO-8859-1">
+<meta charset="UTF-8">
 <link rel='stylesheet' href='/bootstrap/dist/css/bootstrap.min.css'>
-<script type="text/javascript"
-	src="/javascripts/jquery-ui-1.10.4.custom/js/jquery-1.10.2.js"></script>
-<script type="text/javascript"
-	src="/javascripts/jquery-ui-1.11.4.custom/jquery-ui.min.js"></script>
+<script type="text/javascript" src="/javascripts/jquery-ui-1.10.4.custom/js/jquery-1.10.2.js"></script>
+<script type="text/javascript" src="/javascripts/jquery-ui-1.11.4.custom/jquery-ui.min.js"></script>
 <script type="text/javascript" src="/javascripts/ol.js"></script>
 <script type="text/javascript" src="/bootstrap/dist/js/bootstrap.min.js"></script>
 <link rel='stylesheet' href='/stylesheets/style.css'>
 <link rel="stylesheet" href="/stylesheets/ol.css" type="text/css">
 <link rel="stylesheet" type="text/css" href="/stylesheets/samples.css">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 
 <title>Insert title here</title>
 </head>
 <body>
-	<form action="/db/add" method="GET" class="navbar-form navbar-left">
-		<div class="input-group" style="width: 100%">
-			<span class="input-group-addon" id="basic-addon1">Título</span> <input
-				type="text" name="titulo" class="form-control"
-				placeholder="Batalla de San Lorenzo" aria-describedby="basic-addon1">
+<div>
+	<ul class="nav nav-tabs" role="tablist">
+    	<li role="presentation" class="active">
+        	<a id="homa" href="#home" aria-controls="home" role="tab" data-toggle="tab">Acontecimiento</a>
+      	</li>
+      	<li role="presentation">
+        	<a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">LÃ­nea de Tiempo</a>
+      	</li>
+    </ul>
+    <div class="tab-content">
+    	<div role="tabpanel" class="tab-pane active" id="home">	
+			<form action="/db/add" method="GET" class="navbar-form navbar-left">		
+				<div class="input-group" style="width: 100%">
+					<span class="input-group-addon" id="basic-addon1">TÃ­tulo</span> 
+					<input type="text" name="titulo" class="form-control" placeholder="Batalla de San Lorenzo" aria-describedby="basic-addon1">
+				</div>
+				<p></p>
+				<div class="input-group" style="width: 100%">
+					<span class="input-group-addon" id="basic-addon1">Fecha</span> 
+					<input type="number" name="dia" class="form-control" placeholder="DÃ­a"	aria-describedby="basic-addon1">
+					<input type="number" name="mes" class="form-control" placeholder="Mes"	aria-describedby="basic-addon1">
+					<input type="number" name="ano" class="form-control" placeholder="AÃ±o"	aria-describedby="basic-addon1">
+				</div>
+				<p></p>
+				<div class="input-group">
+					<span class="input-group-addon" id="basic-addon1">Coordenadas</span>
+					<input type="number" id="x" name="coordenadaX" step="0.01"	class="form-control" placeholder="37,35" aria-describedby="basic-addon1"> 
+					<span class="input-group-addon" id="basic-addon1">x</span> 
+					<input type="number" id="y" name="coordenadaY" step="0.01" class="form-control" placeholder="15,48" aria-describedby="basic-addon1"> 
+					<span class="input-group-addon" id="basic-addon1">y</span>
+				</div>
+				<p></p>
+				<div class="input-group" style="width: 100%">
+					<span class="input-group-addon" id="basic-addon1">Contenido</span>
+					<textarea class="form-control" name="contenido" rows="8"
+						aria-describedby="basic-addon1"></textarea>
+				</div>
+				<p>
+				<div class="input-group">
+					<span class="input-group-addon" id="basic-addon1">Categoria</span>
+		                <input name="categoria" type="TextBox" ID="datebox" Class="form-control">
+		                <div class="input-group-btn">
+		                	<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+		                    	<span class="caret"></span>
+		                  	</button>
+		                  	<ul id="demolist" class="dropdown-menu">
+		                    	<li><a href="#">Historia</a></li>
+			                    <li><a href="#">MÃºsica</a></li>
+			                    <li><a href="#">GeografÃ­a</a></li>
+			                  </ul>
+		                </div>
+		        </div>
+				<p></p>
+				<button type="submit" class="btn btn-default">Submit</button>
+				<br><br>
+				<div id="map" class="map" style="height: 300px; width: 100%;"></div>
+				<div id="overlay" style="background-color: white; border-radius: 10px; border: 1px solid black; padding: 5px 10px;"></div>
+			</form>
 		</div>
-		<p></p>
-		<div class="input-group" style="width: 100%">
-			<span class="input-group-addon" id="basic-addon1">Fecha</span> 
-			<input type="number" name="dia" class="form-control" placeholder="Día"	aria-describedby="basic-addon1">
-			<input type="number" name="mes" class="form-control" placeholder="Mes"	aria-describedby="basic-addon1">
-			<input type="number" name="ano" class="form-control" placeholder="Año"	aria-describedby="basic-addon1">
-		</div>
-		<p></p>
-		<div class="input-group">
-			<span class="input-group-addon" id="basic-addon1">Coordenadas</span>
-			<input type="number" id="x" name="coordenadaX" step="0.01"
-				class="form-control" placeholder="37,35"
-				aria-describedby="basic-addon1"> <span
-				class="input-group-addon" id="basic-addon1">x</span> <input
-				type="number" id="y" name="coordenadaY" step="0.01"
-				class="form-control" placeholder="15,48"
-				aria-describedby="basic-addon1"> <span
-				class="input-group-addon" id="basic-addon1">y</span>
-		</div>
-		<p></p>
-		<div class="input-group" style="width: 100%">
-			<span class="input-group-addon" id="basic-addon1">Contenido</span>
-			<textarea class="form-control" name="contenido" rows="8"
-				aria-describedby="basic-addon1"></textarea>
-		</div>
-		<p>
-		<div class="input-group">
-			<span class="input-group-addon" id="basic-addon1">Categoria</span>
-                <input name="categoria" type="TextBox" ID="datebox" Class="form-control">
-                <div class="input-group-btn">
-                	<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-                    	<span class="caret"></span>
-                  	</button>
-                  	<ul id="demolist" class="dropdown-menu">
-                    	<li><a href="#">Historia</a></li>
-	                    <li><a href="#">Música</a></li>
-	                    <li><a href="#">Geografía</a></li>
-	                  </ul>
-                </div>
-        </div>
-		<p></p>
-		<button type="submit" class="btn btn-default">Submit</button>
-		<div id="map" class="map" style="height: 300px; width: 100%;"></div>
-		<div id="overlay" style="background-color: white; border-radius: 10px; border: 1px solid black; padding: 5px 10px;"></div>
-	</form>
-
+		<div role="tabpanel" class="tab-pane" id="profile">
+			<div class="col-md-5">
+				<div class="input-group-btn">
+					<input id="nombre-linea" name="nombreLinea" type="TextBox" ID="datebox" Class="form-control">
+					<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+						<span class="caret"></span>
+					</button>
+					<button type="button" class="btn btn-primary">
+						<span class="">Nuevo</span>
+					</button>
+					<ul id="listLineasDeTiempo" class="dropdown-menu">
+						
+					</ul>
+			    </div>
+		        <div id="sortable1" class="list-group connectedSortable">	
+		        	<a href="#" class="list-group-item active">
+		          		<h4 class="list-group-item-heading">LÃ­nea de Tiempo</h4>
+	          		</a>
+		          	
+		        </div>
+	        </div>
+	        <div id="sortable2" class="list-group col-md-4 connectedSortable">	
+	          	<a href="#" class="list-group-item active">
+	          		<h4 class="list-group-item-heading">Acontecimientos</h4>
+	          	</a>
+	        </div>
+	        <button onclick="guardarLinea();">Guardar</button>
+      	</div>
+	</div>
+</div>
 
 
 </body>
 
 <script type="text/javascript">
+	
+	$('#home a').click(function(e) {
+	  e.preventDefault();
+	  console.log('evento ' + e);
+	  $(this).tab('show');
+	});
+	
+	$('#demolist li').on('click', function() {
+	  $('#datebox').val($(this).text());
+	});
+	$('#listLineasDeTiempo li').on('click', function() {
+	  $('#lineas').val($(this).text());
+	});
+	
+	$(function() {
+	  $("#sortable1, #sortable2").sortable({
+	    connectWith: ".connectedSortable"
+	  }).disableSelection();
+	});
+	
+	
+	
+	$.get("/db/findAll", function(data, status){
+		//$('#sortable2').empty();	
+		data.forEach(function(data){
+			var item = "<a href='#' id="+data.id+" class='list-group-item'>"; 
+			item += "<h4 class='list-group-item-heading'>"+data.titulo+"</h4>";
+			item += "<p class='list-group-item-text'>"+data.contenido+"</p>";
+			item += "</a>";
+			$('#sortable2').append(item);
+		});
+	});	
+	
+	function guardarLinea(){		
+		console.log($("#sortable1"));
+		var acontecimientos = new Array();
+		
+		$("#sortable1").children('a').each(function() {
+		  	$this = $(this);
+		  	//console.log($this);
+		  	var id = $this.attr("id");
+		  	//console.log(id);
+		  	if(id == null){
+		  		console.log("null");
+		  	}else{
+		  		acontecimientos.push(id);
+		  	}
+		});
+		console.log(JSON.stringify(acontecimientos));
+		var nombreLinea = $("#nombre-linea").val();
+		console.log("nombreLinea "+ nombreLinea);
+		$.get("/db/saveLineaDeTiempo?titulo="+nombreLinea+"&acontecimientos="+JSON.stringify(acontecimientos), function(data, status){
+		
+		});	
+	}
+	
+
 	var layer = new ol.layer.Tile({
 		source : new ol.source.OSM()
 	});

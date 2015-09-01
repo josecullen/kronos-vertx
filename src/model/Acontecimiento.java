@@ -10,7 +10,13 @@ import java.util.List;
  * 
  */
 @Entity
-@NamedQuery(name="Acontecimiento.findAll", query="SELECT a FROM Acontecimiento a")
+@NamedQueries({
+	@NamedQuery(name="Acontecimiento.findAll", query="SELECT a FROM Acontecimiento a"),
+	@NamedQuery(name="Acontecimiento.findByYear", query="SELECT a FROM Acontecimiento a WHERE a.año = :año"),
+	@NamedQuery(name="Acontecimiento.findById", query="SELECT a FROM Acontecimiento a WHERE a.id = :id")
+
+})
+
 public class Acontecimiento implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -21,6 +27,7 @@ public class Acontecimiento implements Serializable {
 	private long id;
 	
 	private String contenido;
+	private String categoria;
 
 	@Column(name="COORD_X")
 	private double coordX;
@@ -54,6 +61,14 @@ public class Acontecimiento implements Serializable {
 
 	public long getId() {
 		return id;
+	}
+	
+	public String getCategoria() {
+		return categoria;
+	}
+
+	public void setCategoria(String categoria) {
+		this.categoria = categoria;
 	}
 
 	public void setId(long id) {

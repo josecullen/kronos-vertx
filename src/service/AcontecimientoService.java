@@ -42,7 +42,18 @@ public class AcontecimientoService implements BasicServiceInterface<Acontecimien
 
 	@Override
 	public EntityManager getEM() {
-		return null;
+		return em;
+	}
+	
+	public List<Acontecimiento> getAcontecimientoByYear(int year){
+		TypedQuery<Acontecimiento> query = em.createNamedQuery("Acontecimiento.findByYear", Acontecimiento.class);
+		return query.setParameter("año", year).getResultList();
+	}
+	
+	public Acontecimiento getAcontecimientoById(int id){
+		TypedQuery<Acontecimiento> query = em.createNamedQuery("Acontecimiento.findById", Acontecimiento.class);
+		Acontecimiento acontecimiento = query.setParameter("id", id).getResultList().get(0);
+		return acontecimiento;
 	}
 
 }

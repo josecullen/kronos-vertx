@@ -69,7 +69,6 @@
 			var year = $('#year').text();
 			year = parseInt(year);
 			$.get("/yearFilter?year="+year, function(data, status){});
-
 		}
 		var sendZoom = function(){
 			var zoom = $('#zoom').text();
