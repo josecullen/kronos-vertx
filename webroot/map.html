@@ -3,6 +3,11 @@
 <head>
 <meta charset="ISO-8859-1">
 	<link rel='stylesheet' href='/bootstrap/dist/css/bootstrap.min.css'>
+	<meta http-equiv="cache-control" content="max-age=0" />
+	<meta http-equiv="cache-control" content="no-cache" />
+	<meta http-equiv="expires" content="0" />
+	<meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
+	<meta http-equiv="pragma" content="no-cache" />    	
     <script type="text/javascript" src="/javascripts/jquery-ui-1.10.4.custom/js/jquery-1.10.2.js"></script>
     <script type="text/javascript" src="/javascripts/jquery-ui-1.11.4.custom/jquery-ui.min.js"></script>
     <script type="text/javascript" src="/javascripts/ol.js"></script>
@@ -15,7 +20,10 @@
 <title>Insert title here</title>
 </head>
 <body>
-  	<div id="map" class="map"></div>  
+  	<div id="map" class="map"></div>
+  	<button type="button" onclick="openControl();" class="btn btn-default badge" aria-label="Left Align">
+      <span class="glyphicon glyphicon-blackboard" aria-hidden="true"></span>
+    </button>  
 <!--   	<div class="btn-group" data-toggle="buttons"> -->
 	  	<label class="btn btn-primary active">
 	    	<input id="srcLocal" type="checkbox" onclick='changeMapSrc(this);' checked> Mapas Locales
@@ -23,10 +31,17 @@
 <!-- 	</div> -->
    
   <script type="text/javascript">	  
+      var control;
+      var openControl = function() {
+  		 control = window.open("control2.html", "windowName", "resizable=yes");
+	  }
+      
       var osmLayer = new ol.layer.Tile({
         source: new ol.source.OSM()
       });
-      var birmingham = ol.proj.transform([2.08, 48.66], 'EPSG:4326', 'EPSG:3857');      
+      
+      var birmingham = ol.proj.transform([2.08, 48.66], 'EPSG:4326', 'EPSG:3857');
+            
       var view = new ol.View({      
         center: birmingham,
         zoom: 1
@@ -53,65 +68,62 @@
       		newLayer.setVisible(false);
       		osmLayer.setVisible(true);
       	}
-      }
-      
-      
+      }      
       
       window.onload = function(){
         getUpdate();
-      }
+      }      
       
-      
-      var getUpdate = function(){
-        $.getJSON("/getUpdate", function(data){
-          console.log(data);
-          if(!data.sended){
-            console.log(data.update);
-            if(data.update.indexOf('fly') > -1){
-              console.log(data.x+" "+data.y);
-              var location = ol.proj.transform([parseFloat(data.x), parseFloat(data.y)], 'EPSG:4326', 'EPSG:3857');
-              doBounce(location);
-            }else if(data.update.indexOf('filter') > -1){
+//       var getUpdate = function(){
+//         $.getJSON("/getUpdate", function(data){
+//           console.log(data);
+//           if(!data.sended){
+//             console.log(data.update);
+//             if(data.update.indexOf('fly') > -1){
+//               console.log(data.x+" "+data.y);
+//               var location = ol.proj.transform([parseFloat(data.x), parseFloat(data.y)], 'EPSG:4326', 'EPSG:3857');
+//               doBounce(location);
+//             }else if(data.update.indexOf('filter') > -1){
               
-              var overlays = map.getOverlays();
-              console.log("overlays " +overlays.getLength());
-              while(overlays.getLength() > 0){
-                overlays.forEach(function(overl){
-                  console.log(overl);
-                  map.removeOverlay(overl);
-                });    
-                overlays = map.getOverlays();
-              }
+//               var overlays = map.getOverlays();
+//               console.log("overlays " +overlays.getLength());
+//               while(overlays.getLength() > 0){
+//                 overlays.forEach(function(overl){
+//                   console.log(overl);
+//                   map.removeOverlay(overl);
+//                 });    
+//                 overlays = map.getOverlays();
+//               }
               
-              data.acont.forEach(function(item){
-                var coord = [parseFloat(item.coordenadas[0]), parseFloat(item.coordenadas[1])];
-                console.log(coord);
-                var div = document.createElement("div");
-                var img = document.createElement("img");
-                img.src = "images/icon.png";
-                div.appendChild(img);
+//               data.acont.forEach(function(item){
+//                 var coord = [parseFloat(item.coordenadas[0]), parseFloat(item.coordenadas[1])];
+//                 console.log(coord);
+//                 var div = document.createElement("div");
+//                 var img = document.createElement("img");
+//                 img.src = "images/icon.png";
+//                 div.appendChild(img);
                 
-                var overlay = new ol.Overlay({
-                  element : div,
-                  positioning : 'bottom-center'
-                });
+//                 var overlay = new ol.Overlay({
+//                   element : div,
+//                   positioning : 'bottom-center'
+//                 });
                   
-                var pos = ol.proj.transform(coord, 'EPSG:4326', 'EPSG:3857');
-                overlay.setPosition(pos);
-                map.addOverlay(overlay);
-              });
-            }else if(data.update.indexOf('zoom') > -1){
-              var zoom = ol.animation.zoom({
-                resolution: map.getView().getResolution()
-              });
-              map.beforeRender(zoom);
-              view.setZoom(data.zoom);
-            }
+//                 var pos = ol.proj.transform(coord, 'EPSG:4326', 'EPSG:3857');
+//                 overlay.setPosition(pos);
+//                 map.addOverlay(overlay);
+//               });
+//             }else if(data.update.indexOf('zoom') > -1){
+//               var zoom = ol.animation.zoom({
+//                 resolution: map.getView().getResolution()
+//               });
+//               map.beforeRender(zoom);
+//               view.setZoom(data.zoom);
+//             }
             
-          }
-        });
-        setTimeout(getUpdate, 1000);
-      }
+//           }
+//         });
+//         setTimeout(getUpdate, 1000);
+//       }
       function doBounce(location) {
         // bounce by zooming out one level and back in
         var bounce = ol.animation.bounce({

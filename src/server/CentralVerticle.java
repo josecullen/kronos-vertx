@@ -9,6 +9,7 @@ import server.handler.control.GetUpdateHandler;
 import server.handler.control.YearFilterHandler;
 import server.handler.db.AddAcontecimientoHandler;
 import server.handler.db.FindAllAcontecimientosHandler;
+import server.handler.db.FindLineaDeTiempoHandler;
 import server.handler.db.SaveLineaDeTiempoHandler;
 import service.AcontecimientoService;
 import service.LineaDeTiempoService;
@@ -43,7 +44,7 @@ public class CentralVerticle extends AbstractVerticle {
 		Route routeUpdate = router.route("/getUpdate").handler(new GetUpdateHandler());
 		Route yearFilter = router.route("/yearFilter").handler(new YearFilterHandler());
 		Route flyTo = router.route("/flyTo").handler(new FlyToHandler());
-
+		Route findLineaDeTiempo = router.route("/db/findLinea").handler(new FindLineaDeTiempoHandler());
 		router.route("/*").handler(StaticHandler.create());
 		server.requestHandler(router::accept).listen(8080);
 	}

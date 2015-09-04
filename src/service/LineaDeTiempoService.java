@@ -40,13 +40,15 @@ public class LineaDeTiempoService implements BasicServiceInterface<LineaDeTiempo
 	}
 
 	public boolean remove(LineaDeTiempo entity) {
-		// TODO Auto-generated method stub
+		
 		return false;
 	}
 
-	public LineaDeTiempo find(String name) {
-		// TODO Auto-generated method stub
-		return null;
+	public LineaDeTiempo find(String titulo) {
+		TypedQuery<LineaDeTiempo> query = 
+				em.createNamedQuery("LineaDeTiempo.findByTitulo", LineaDeTiempo.class).setParameter("titulo", titulo);
+		List<LineaDeTiempo> lista = query.getResultList();
+		return  lista != null ? lista.get(0) : null;
 	}
 
 	public EntityManager getEM() {

@@ -14,7 +14,11 @@ import java.util.List;
  */
 @Entity
 @Table(name="LINEA_DE_TIEMPO")
-@NamedQuery(name="LineaDeTiempo.findAll", query="SELECT l FROM LineaDeTiempo l")
+@NamedQueries({
+	@NamedQuery(name="LineaDeTiempo.findAll", query="SELECT l FROM LineaDeTiempo l"),
+	@NamedQuery(name="LineaDeTiempo.findByTitulo", query="SELECT l FROM LineaDeTiempo l WHERE l.titulo = :titulo")
+
+})
 public class LineaDeTiempo implements Serializable {
 	private static final long serialVersionUID = 1L;
 

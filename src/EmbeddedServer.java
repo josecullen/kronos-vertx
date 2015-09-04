@@ -1,15 +1,5 @@
 import io.vertx.core.Vertx;
-import io.vertx.core.http.HttpServer;
-import io.vertx.core.http.HttpServerResponse;
-import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
-import io.vertx.ext.web.Route;
-import io.vertx.ext.web.Router;
-import io.vertx.ext.web.handler.StaticHandler;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
@@ -22,10 +12,7 @@ import javafx.stage.WindowEvent;
 import javax.persistence.EntityManager;
 import javax.persistence.Persistence;
 
-import model.Acontecimiento;
-import model.LineaDeTiempo;
 import server.CentralVerticle;
-import server.DbVerticle;
 import service.AcontecimientoService;
 import service.LineaDeTiempoService;
 import view.Menu;
@@ -54,7 +41,7 @@ public class EmbeddedServer extends Application {
 		Scene scene = new Scene(new Menu(), 1200, 800);
 		primaryStage.setScene(scene);
 		maximize(primaryStage);
-		primaryStage.show();
+	//	primaryStage.show();
 		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 			@Override
 			public void handle(WindowEvent event) {
