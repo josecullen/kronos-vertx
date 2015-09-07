@@ -24,7 +24,10 @@ public class Util {
 				.put("categoria", acontecimiento.getCategoria())
 				.put("coordenadas", coords)
 				.put("contenido", acontecimiento.getContenido())
-				.put("id", acontecimiento.getId());
+				.put("id", acontecimiento.getId())
+				.put("dia", acontecimiento.getDia())
+				.put("mes", acontecimiento.getMes())
+				.put("año", acontecimiento.getAño());
 			aconts.add(acont);
 		}
 		

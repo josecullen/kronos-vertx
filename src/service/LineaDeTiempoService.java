@@ -48,7 +48,8 @@ public class LineaDeTiempoService implements BasicServiceInterface<LineaDeTiempo
 		TypedQuery<LineaDeTiempo> query = 
 				em.createNamedQuery("LineaDeTiempo.findByTitulo", LineaDeTiempo.class).setParameter("titulo", titulo);
 		List<LineaDeTiempo> lista = query.getResultList();
-		return  lista != null ? lista.get(0) : null;
+		
+		return  lista.size() > 0 ? lista.get(0) : null;
 	}
 
 	public EntityManager getEM() {
