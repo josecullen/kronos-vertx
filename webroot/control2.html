@@ -2,16 +2,12 @@
 <html>
 
   <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-	<meta http-equiv="cache-control" content="max-age=0" />
-	<meta http-equiv="cache-control" content="no-cache" />
-	<meta http-equiv="expires" content="0" />
-	<meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT" />
-	<meta http-equiv="pragma" content="no-cache" />    
+    <meta name="viewport" content="width=device-width, initial-scale=1" />   
 	<link rel='stylesheet' href='/bootstrap/dist/css/bootstrap.min.css'>
     <script type="text/javascript" src="/javascripts/jquery-ui-1.10.4.custom/js/jquery-1.10.2.js"></script>
     <script type="text/javascript" src="/javascripts/jquery-ui-1.11.4.custom/jquery-ui.min.js"></script>
     <script type="text/javascript" src="/javascripts/ol.js"></script>
+    <script type="text/javascript" src="/javascripts/angular.min.js"></script>    
     <script type="text/javascript" src="/bootstrap/dist/js/bootstrap.min.js"></script>
     <link rel='stylesheet' href='/stylesheets/style.css'>
     <link rel="stylesheet" href="/stylesheets/ol.css" type="text/css">
@@ -30,28 +26,11 @@
 		  map.addLayer(osmLayer);
 		  
 		  $.get("/db/findLinea?titulo=Otra linea Nueva", function(linea, status){
-				console.log(linea);
+				//console.log(linea);
 				var lineaTiempo = JSON.parse(linea);
 				
 				$('#lineaTiempo').empty();
 				
-// 				var item = 	"<a href='#' class='list-group-item active'>"; 
-// 				item += 		"<p class='list-group-item-text'>"+lineaTiempo.titulo+"</p>";
-//             	item += 	"</a>";
-// 				$('#list').append(item);				
-				
-// 				var acontecimientos = lineaTiempo.acontecimientos;  
-// 				acontecimientos.forEach(function(data){
-// 					var item = "<a href='#' class='list-group-item'>" 
-// 					item += 		"<button type='button' onclick='flyTo("+data.coordenadas+");' class='btn btn-default badge' aria-label='Left Align'>";
-// 					item += 			"<span class='glyphicon glyphicon-send' aria-hidden='true'></span>";
-// 					item += 		"</button>";
-// 					item +=			"<p class='list-group-item-text'>"+data.titulo+"</p>";
-// 					item += 	"</a>";
-// 					$('#list').append(item);
-// 				});	
-				
-			
 				var item = 	"<div class='input-group col-md-12 col-sm-12 col-xs-12'>";
 				item +=			"<a href='#' class='list-group-item active'>";
 				item += 			"<p class='list-group-item-text'>"+lineaTiempo.titulo+"</p>";
@@ -82,15 +61,67 @@
 	        var location = ol.proj.transform([parseFloat(x), parseFloat(y)], 'EPSG:4326', 'EPSG:3857');
 	        window.opener.doBounce(location);
 		}
+		
+		
+		
+		
+		var app = angular.module('app', []).controller('control', function($scope, $http) {
+		  $scope.linea = {};
+		  $http.get("/db/findLinea?titulo=Otra linea Nueva").success(function(response) {$scope.linea = response;});
+		  
+		  $scope.currentPage = 0;
+		  $scope.pageSize = 3;		  
+		  $scope.fly = function(coordenadas) {
+		    console.log(coordenadas);
+		  };
+		
+		});
+		
+		app.filter('startFrom', function() {
+		    return function(input, start) {
+		        start = +start; //parse to int
+		        return input.slice(start);
+		    }
+		});
+		
+		
     </script>
 
   </head>
 
-  <body>
+  <body ng-app="app" ng-controller="control">
     <div class="jumbotron">
       <div class="container">
         <h1>Control Remoto</h1>
-        <div id="lineaTiempo" class="col-md-4 col-sm-12 col-xs-12"></div>
+        
+		<div class="col-md-4 col-sm-12 col-xs-12">
+	      
+	      <div class="input-group col-md-12 col-sm-12 col-xs-12">
+	        <a href="#" class="list-group-item active ">
+	          <p class="list-group-item-text">Línea de Tiempo</p>
+	        </a>
+	      </div>
+	      
+	      <div class="input-group" ng-repeat="acont in linea.acontecimientos | startFrom:currentPage*pageSize | limitTo:pageSize">
+	        <a href="#" class="list-group-item">
+	          <h4 class="list-group-item-text">{{acont.titulo}}</h4>
+	          <h5 class="list-group-item-text">{{acont.ano}}</h5>
+	        </a>
+	        <span class="input-group-addon glyphicon glyphicon-modal-window" onclick="console.log('hola')" style="cursor:pointer"></span>
+	        <span class="input-group-addon glyphicon glyphicon-send" ng-click="fly(acont.coordenadas)" onclick="console.log('hola')" style="cursor:pointer"></span>
+	      </div>
+	
+	      <nav>
+	        <ul class="pager">
+	          <li><a href="#" ng-disabled="currentPage == 0" ng-click="currentPage=currentPage-1">Previous</a></li>
+	          <li><a href="#">{{currentPage+1}}/{{linea.acontecimientos.length/pageSize | number:0}}</a></li>
+	          <li><a href="#" ng-disabled="currentPage >= data.length/pageSize - 1" ng-click="currentPage=currentPage+1">Next</a></li>
+	        </ul>
+	      </nav>
+	      
+		</div>
+        
+        
         
         <div class="col-md-4 col-sm-12 col-xs-12">      
 	      <div class="input-group col-md-12 col-sm-12 col-xs-12">
@@ -128,8 +159,8 @@
       </div>
       
     </div>
-    <div class="container">
-      <div id="map" class="map col-md-4"></div>
+    <div class="container col-md-3">
+      <div id="map" class="map col-md-3"></div>
     </div>
   </body>
 </html>
