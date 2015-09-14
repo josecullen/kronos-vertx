@@ -3,7 +3,8 @@
 
   <head>
     <meta name="viewport" content="width=device-width, initial-scale=1" />   
-	<link rel='stylesheet' href='/bootstrap/dist/css/bootstrap.min.css'>
+	<link rel='stylesheet' href='/bootstrap/dist/css/bootstrap.css'>
+	<link rel="stylesheet" type="text/css" href="/bootstrap/dist/css/bootstrap-theme.css">
     <script type="text/javascript" src="/javascripts/jquery-ui-1.10.4.custom/js/jquery-1.10.2.js"></script>
     <script type="text/javascript" src="/javascripts/jquery-ui-1.11.4.custom/jquery-ui.min.js"></script>
     <script type="text/javascript" src="/javascripts/ol.js"></script>
@@ -25,35 +26,6 @@
 		
 		  map.addLayer(osmLayer);
 		  
-		  $.get("/db/findLinea?titulo=Otra linea Nueva", function(linea, status){
-				//console.log(linea);
-				var lineaTiempo = JSON.parse(linea);
-				
-				$('#lineaTiempo').empty();
-				
-				var item = 	"<div class='input-group col-md-12 col-sm-12 col-xs-12'>";
-				item +=			"<a href='#' class='list-group-item active'>";
-				item += 			"<p class='list-group-item-text'>"+lineaTiempo.titulo+"</p>";
-				item +=		 	"</a>";
-				item +=		"</div>";				 
-				 
-				$('#lineaTiempo').append(item);				
-				
-				var acontecimientos = lineaTiempo.acontecimientos;  
-				acontecimientos.forEach(function(data){
-					var item = "<div class='input-group'>";
-					item +=			"<a href='#' class='list-group-item' onclick='console.log(\""+data.titulo+"\");'>";
-					item +=				"<h4 class='list-group-item-text'>"+data.titulo.substring(0,30)+"</h4>";
-					item +=				"<h5 class='list-group-item-text'>"+data.dia+"/"+data.mes+"/"+data.año+"</h5>";
-					item +=			"</a>";
-					item +=			"<span class='input-group-addon glyphicon glyphicon-modal-window' onclick='console.log(\'hola\')' style='cursor:pointer'></span>";
-					item +=			"<span class='input-group-addon glyphicon glyphicon-send' onclick='flyTo("+data.coordenadas+");' style='cursor:pointer'></span>";		
-					item +=		"</div>";		
-					$('#lineaTiempo').append(item);
-				});
-						
-				
-			});		
 		}
 		
 		function flyTo(x,y){
@@ -61,19 +33,56 @@
 	        var location = ol.proj.transform([parseFloat(x), parseFloat(y)], 'EPSG:4326', 'EPSG:3857');
 	        window.opener.doBounce(location);
 		}
+	
+		function fly(coordenadas) {
+			console.log("fly "+coordenadas);
+	        var location = ol.proj.transform(coords, 'EPSG:4326', 'EPSG:3857');
+	        window.opener.doBounce(location);
+	   	};
 		
 		
-		
-		
-		var app = angular.module('app', []).controller('control', function($scope, $http) {
-		  $scope.linea = {};
+		var app = angular.module('app', []);
+		app.controller('control', function($scope, $http) {
+		  $scope.linea = {
+		  	acontecimientos: [{
+		  		titulo: "tit",
+		  		ano: "1982",
+		  		coordenadas: [-32,65]
+		  	}]
+		  };
+		  $scope.acontecimiento = {
+		  	titulo : "empty",
+		  	contenido : "empty"		  
+		  };
+		  
 		  $http.get("/db/findLinea?titulo=Otra linea Nueva").success(function(response) {$scope.linea = response;});
 		  
 		  $scope.currentPage = 0;
 		  $scope.pageSize = 3;		  
+		  
 		  $scope.fly = function(coordenadas) {
-		    console.log(coordenadas);
-		  };
+		    console.log("fly angular "+coordenadas);
+	        var location = ol.proj.transform(coordenadas, 'EPSG:4326', 'EPSG:3857');
+	        window.opener.doBounce(location);
+	   	  };
+	   	  
+	   	  $scope.setAcontecimiento = function(acontecimiento){ $scope.acontecimiento = acontecimiento;  };
+
+		
+		});
+		
+		app.controller('toggle', function($scope, $http) {
+
+	   	  $scope.addRemoveOverlay = function(coordenadas){	   	  	
+	   	  	$scope.state = !$scope.state;	   	  	
+	   	  	if($scope.state){
+	   	  		$scope.overlay = window.opener.addOverlay(coordenadas);
+	   	  		$scope.spanStyle = {'background-color': '#777'};
+	   	  	}else{
+	   	  		window.opener.removeOverlay($scope.overlay);
+	   	  		$scope.spanStyle = {'background-color': '#eee'};	   	  		
+	   	  	}
+	   	  }
 		
 		});
 		
@@ -90,25 +99,26 @@
   </head>
 
   <body ng-app="app" ng-controller="control">
-    <div class="jumbotron">
-      <div class="container">
+    <div class="jumbotron col-md-12">
+      <div class="container col-md-12">
         <h1>Control Remoto</h1>
         
 		<div class="col-md-4 col-sm-12 col-xs-12">
 	      
 	      <div class="input-group col-md-12 col-sm-12 col-xs-12">
 	        <a href="#" class="list-group-item active ">
-	          <p class="list-group-item-text">Línea de Tiempo</p>
+	          <p class="list-group-item-text">{{linea.titulo}}</p>
 	        </a>
 	      </div>
 	      
-	      <div class="input-group" ng-repeat="acont in linea.acontecimientos | startFrom:currentPage*pageSize | limitTo:pageSize">
-	        <a href="#" class="list-group-item">
+	      <div ng-controller="toggle" class="input-group" ng-repeat="acont in linea.acontecimientos | startFrom:currentPage*pageSize | limitTo:pageSize">
+	      	<span class="input-group-addon glyphicon glyphicon-bookmark" ng-style="spanStyle" ng-click="addRemoveOverlay(acont.coordenadas);" style="cursor:pointer;"></span>
+	        <a href="#" class="list-group-item" ng-click="setAcontecimiento(acont)">
 	          <h4 class="list-group-item-text">{{acont.titulo}}</h4>
 	          <h5 class="list-group-item-text">{{acont.ano}}</h5>
 	        </a>
 	        <span class="input-group-addon glyphicon glyphicon-modal-window" onclick="console.log('hola')" style="cursor:pointer"></span>
-	        <span class="input-group-addon glyphicon glyphicon-send" ng-click="fly(acont.coordenadas)" onclick="console.log('hola')" style="cursor:pointer"></span>
+	        <span class="input-group-addon glyphicon glyphicon-send" ng-click="fly(acont.coordenadas);"  style="cursor:pointer"></span>
 	      </div>
 	
 	      <nav>
@@ -121,8 +131,7 @@
 	      
 		</div>
         
-        
-        
+                
         <div class="col-md-4 col-sm-12 col-xs-12">      
 	      <div class="input-group col-md-12 col-sm-12 col-xs-12">
 	        <a href="#" class="list-group-item active ">
@@ -153,14 +162,52 @@
 	        <span class="input-group-addon glyphicon glyphicon-modal-window" onclick="console.log('hola')" style="cursor:pointer"></span>
 	        <span class="input-group-addon glyphicon glyphicon-send" onclick="console.log('hola')" style="cursor:pointer"></span>
 	      </div>	
-		</div>
+		</div>       
         
-        
+      </div>      
+    </div>
+    
+    <div class="col-md-4">
+      <div id="map" class="map"></div>
+    </div>
+    <div class="jumbotron col-md-8">
+		  <div>
+			<h2>{{acontecimiento.titulo}}
+			<a href="#" class="btn btn-sq-lg btn-lg navbar-right">
+				<i class="glyphicon glyphicon-modal-window"></i>                
+	        </a>
+	        <a href="#" ng-click="fly(acontecimiento.coordenadas);" class="btn btn-sq-lg btn-lg navbar-right">
+				<i class="glyphicon glyphicon-send"></i>                
+	        </a>
+			</h2>	    	
+          </div>    	
+    	<div>
+    		<p>{{acontecimiento.contenido}}</p>
+    	</div>
+    </div>
+    
+    <!--  Footer -->
+    <nav class="navbar navbar-inverse navbar-fixed-bottom">
+    <div class="container">
+      <div class="navbar-header">
+        <div class="btn-group btn-group-lg" role="group">
+          <button type="submit" class="btn btn-sq glyphicon glyphicon-arrow-left"></button>
+          <button type="submit" class="btn btn-sq-lg glyphicon glyphicon-arrow-right"></button>
+        </div>
       </div>
-      
+
+      <h4 class="navbar-text">{{linea.titulo}}: {{acontecimiento.titulo}}</h4>
+
+      <div class="btn-group btn-group-lg navbar-right" role="group">
+        <button type="submit" onclick="window.opener.setZoom(true)" class="btn btn-sq glyphicon glyphicon-plus"></button>
+        <button type="submit" onclick="window.opener.setZoom(false)" class="btn btn-sq-lg glyphicon glyphicon-minus"></button>
+        <button type="submit" onclick="window.opener.openContentModal()" class="btn btn-sq glyphicon glyphicon-modal-window"></button>
+        <button type="submit" class="btn btn-sq-lg glyphicon glyphicon-send"></button>
+        <button type="submit" class="btn btn-sq-lg glyphicon glyphicon-bookmark"></button>
+        <button type="submit" class="btn btn-sq-lg glyphicon glyphicon-fullscreen"></button>
+      </div>
+
     </div>
-    <div class="container col-md-3">
-      <div id="map" class="map col-md-3"></div>
-    </div>
+  </nav>
   </body>
 </html>

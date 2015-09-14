@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="ISO-8859-1">
+<meta charset="UTF-8">
 	<link rel='stylesheet' href='/bootstrap/dist/css/bootstrap.min.css'>
 	<meta http-equiv="cache-control" content="max-age=0" />
 	<meta http-equiv="cache-control" content="no-cache" />
@@ -29,8 +29,38 @@
 	    	<input id="srcLocal" type="checkbox" onclick='changeMapSrc(this);' checked> Mapas Locales
 	  	</label>
 <!-- 	</div> -->
+  	<button type="button" onclick="openContentModal();" class="btn btn-default badge" aria-label="Left Align">
+Content Modal
+	    </button>  
+	
+<div id="contentModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+            <div class="jumbotron col-md-12">
+        		<h4>Linea de tiempo</h4>
+        		<h2>Acontecimiento</h2>        		
+        	</div>
+        <div>
+        <div class="col-xs-6 col-md-3">
+		    <a href="#" class="thumbnail">
+		      <img src="images/sanmartin.jpg">
+		    </a>
+		</div>
+		<h3>José Francisco de San Martín y Matorras1 (Yapeyú, 25 de febrero de 1778-Boulogne-sur-Mer, 17 de agosto de 1850)2 fue un militar cuyas campañas fueron decisivas para las independencias de la Argentina, Chile y Perú.
+En abril de 1784, cuando tenía seis años, llegó con su familia a Cádiz (España) ―previa estadía en Buenos Aires―, y se radicó luego en la ciudad de Málaga.3 4 Comenzó sus estudios en el Real Seminario de Nobles de Madrid y en la Escuela de Temporalidades de Málaga en 1786. Ingresó posteriormente al ejército español, hizo su carrera militar en el Regimiento de Murcia.5 Combatió en el norte de África, luego contra la dominación napoleónica de España, y participó en las batallas de Bailén y La Albuera.6
+</h3>
+        </div>
+      </div>
+    </div>
+  </div>
    
   <script type="text/javascript">	  
+      var openContentModal = function(){
+      	  $('#contentModal').modal('show');
+      }
+      
+      
+      
       var control;
       var openControl = function() {
   		 control = window.open("control2.html", "windowName", "resizable=yes");
@@ -124,7 +154,26 @@
 //         });
 //         setTimeout(getUpdate, 1000);
 //       }
-      
+  	function addOverlay(coord){
+  		var div = document.createElement("div");
+  		var img = document.createElement("img");
+  		img.src = "images/icon.png";
+  		div.appendChild(img);
+  		
+  		var overlay = new ol.Overlay({
+        	element : div,
+			positioning : 'bottom-center'
+		});  	
+	  	var pos = ol.proj.transform(coord, 'EPSG:4326', 'EPSG:3857');
+		overlay.setPosition(pos);
+        map.addOverlay(overlay);
+        return overlay;
+  	}
+  	
+  	function removeOverlay(overlay){
+  		map.removeOverlay(overlay);
+  	}
+    
       
       function doBounce(location) {
         // bounce by zooming out one level and back in
@@ -142,6 +191,7 @@
         // trigger the bounce and pan effects
         map.getView().setCenter(location);
       }
+      
       function doPan(location) {
         // pan from the current center
         var pan = ol.animation.pan({
@@ -152,6 +202,18 @@
         map.getView().setCenter(location);
       }
      
+     // Con true aumenta el zoom, con false decrementa
+     function setZoom(zoomIn){
+     	var zoom = ol.animation.zoom({
+        	resolution: map.getView().getResolution()
+        });
+        map.beforeRender(zoom);
+        if(zoomIn){
+        	view.setZoom(view.getZoom()+1);
+        }else{
+        	view.setZoom(view.getZoom()-1);
+        }        
+     }	
 
 
 </script>
