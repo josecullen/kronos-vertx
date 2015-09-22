@@ -35,6 +35,9 @@ public class Acontecimiento implements Serializable {
 	@Column(name="COORD_Y")
 	private double coordY;
 	
+	@Column(name="ZOOM")
+	private int zoom;
+	
 	private int año;
 
 	private int dia;
@@ -137,6 +140,14 @@ public class Acontecimiento implements Serializable {
 
 	public void setLineaDeTiempos(List<LineaDeTiempo> lineaDeTiempos) {
 		this.lineaDeTiempos = lineaDeTiempos;
+	}
+
+	public int getZoom() {
+		return zoom;
+	}
+
+	public void setZoom(int zoom) {
+		this.zoom = zoom;
 	}
 
 }

@@ -17,15 +17,12 @@
 		window.onload = function() {
 		  var osmLayer = new ol.layer.Tile({
 		    source: new ol.source.OSM()
-		  });
-		
+		  });		
 		  var map = new ol.Map({
 		    target: 'map',
 		    view: window.opener.view
-		  });
-		
-		  map.addLayer(osmLayer);
-		  
+		  });		
+		  map.addLayer(osmLayer);		  
 		}
 		
 		function flyTo(x,y){
@@ -40,7 +37,7 @@
 	        window.opener.doBounce(location);
 	   	};
 		
-		
+		// Código Angular
 		var app = angular.module('app', []);
 		app.controller('control', function($scope, $http) {
 		  $scope.linea = {
@@ -60,15 +57,12 @@
 		  $scope.currentPage = 0;
 		  $scope.pageSize = 3;		  
 		  
-		  $scope.fly = function(coordenadas) {
-		    console.log("fly angular "+coordenadas);
-	        var location = ol.proj.transform(coordenadas, 'EPSG:4326', 'EPSG:3857');
-	        window.opener.doBounce(location);
+		  $scope.fly = function(acontecimiento) {
+		    console.log("fly angular "+acontecimiento.coordenadas + "zoom: "+acontecimiento.zoom);	        
+	        window.opener.doBounce(acontecimiento, true);
 	   	  };
 	   	  
 	   	  $scope.setAcontecimiento = function(acontecimiento){ $scope.acontecimiento = acontecimiento;  };
-
-		
 		});
 		
 		app.controller('toggle', function($scope, $http) {
@@ -83,7 +77,6 @@
 	   	  		$scope.spanStyle = {'background-color': '#eee'};	   	  		
 	   	  	}
 	   	  }
-		
 		});
 		
 		app.filter('startFrom', function() {
@@ -118,7 +111,7 @@
 	          <h5 class="list-group-item-text">{{acont.ano}}</h5>
 	        </a>
 	        <span class="input-group-addon glyphicon glyphicon-modal-window" onclick="console.log('hola')" style="cursor:pointer"></span>
-	        <span class="input-group-addon glyphicon glyphicon-send" ng-click="fly(acont.coordenadas);"  style="cursor:pointer"></span>
+	        <span class="input-group-addon glyphicon glyphicon-send" ng-click="fly(acont);"  style="cursor:pointer"></span>
 	      </div>
 	
 	      <nav>

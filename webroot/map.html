@@ -12,212 +12,58 @@
     <script type="text/javascript" src="/javascripts/jquery-ui-1.11.4.custom/jquery-ui.min.js"></script>
     <script type="text/javascript" src="/javascripts/ol.js"></script>
     <script type="text/javascript" src="/bootstrap/dist/js/bootstrap.min.js"></script>
-    <link rel='stylesheet' href='/stylesheets/style.css'>
     <link rel="stylesheet" href="/stylesheets/ol.css" type="text/css">
+    <link rel='stylesheet' href='/stylesheets/style.css'>
     <link rel="stylesheet" type="text/css" href="/stylesheets/samples.css">
 
 
 <title>Insert title here</title>
 </head>
 <body>
-  	<div id="map" class="map"></div>
+    	<div id="map" class="map"></div>
+  
+  <nav id="topNav" class="navbar navbar-default navbar-fixed-top topNavHide">
+    <div class="container">
+        <h1>Revolución de Mayo</h1>
+    </div>
+  </nav>
+
+  <nav id="bottomNav" class="navbar navbar-default navbar-fixed-bottom bottomNavHide">
+    <div class="container">
+        <h1 class="lead">1810, 25 de Mayo</h1>
+    </div>
+  </nav>
+  	
+  	
   	<button type="button" onclick="openControl();" class="btn btn-default badge" aria-label="Left Align">
       <span class="glyphicon glyphicon-blackboard" aria-hidden="true"></span>
     </button>  
-<!--   	<div class="btn-group" data-toggle="buttons"> -->
-	  	<label class="btn btn-primary active">
+  	<div class="btn-group" data-toggle="buttons">
+	  	<label class="btn btn-primary active" onclick='changeMapSrc(this);'>
 	    	<input id="srcLocal" type="checkbox" onclick='changeMapSrc(this);' checked> Mapas Locales
 	  	</label>
-<!-- 	</div> -->
-  	<button type="button" onclick="openContentModal();" class="btn btn-default badge" aria-label="Left Align">
-Content Modal
-	    </button>  
+	</div>
+  	<button type="button" onclick="openContentModal();" class="btn btn-default badge" aria-label="Left Align">Content Modal</button>  
 	
-<div id="contentModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
-    <div class="modal-dialog modal-lg">
-      <div class="modal-content">
-            <div class="jumbotron col-md-12">
-        		<h4>Linea de tiempo</h4>
-        		<h2>Acontecimiento</h2>        		
-        	</div>
-        <div>
-        <div class="col-xs-6 col-md-3">
-		    <a href="#" class="thumbnail">
-		      <img src="images/sanmartin.jpg">
-		    </a>
-		</div>
-		<h3>José Francisco de San Martín y Matorras1 (Yapeyú, 25 de febrero de 1778-Boulogne-sur-Mer, 17 de agosto de 1850)2 fue un militar cuyas campañas fueron decisivas para las independencias de la Argentina, Chile y Perú.
-En abril de 1784, cuando tenía seis años, llegó con su familia a Cádiz (España) ―previa estadía en Buenos Aires―, y se radicó luego en la ciudad de Málaga.3 4 Comenzó sus estudios en el Real Seminario de Nobles de Madrid y en la Escuela de Temporalidades de Málaga en 1786. Ingresó posteriormente al ejército español, hizo su carrera militar en el Regimiento de Murcia.5 Combatió en el norte de África, luego contra la dominación napoleónica de España, y participó en las batallas de Bailén y La Albuera.6
-</h3>
-        </div>
-      </div>
-    </div>
-  </div>
-   
-  <script type="text/javascript">	  
-      var openContentModal = function(){
-      	  $('#contentModal').modal('show');
-      }
-      
-      
-      
-      var control;
-      var openControl = function() {
-  		 control = window.open("control2.html", "windowName", "resizable=yes");
-	  }
-      
-      var osmLayer = new ol.layer.Tile({
-        source: new ol.source.OSM()
-      });
-      
-      var birmingham = ol.proj.transform([2.08, 48.66], 'EPSG:4326', 'EPSG:3857');
-            
-      var view = new ol.View({      
-        center: birmingham,
-        zoom: 1
-      });
-      var map = new ol.Map({
-        target: 'map',
-        view: view
-      });     
-
-      var newLayer = new ol.layer.Tile({
-        source: new ol.source.OSM({
-          url: '/images/osm/{z}/{x}/{y}.png'
-        })
-      });
-      
-      map.addLayer(osmLayer);
-      map.addLayer(newLayer);
-      
-      function changeMapSrc(cb){
-      	if(cb.checked){
-      		newLayer.setVisible(true);
-      		osmLayer.setVisible(false);
-      	}else{
-      		newLayer.setVisible(false);
-      		osmLayer.setVisible(true);
-      	}
-      }      
-      
-      window.onload = function(){
-        getUpdate();
-      }      
-      
-//       var getUpdate = function(){
-//         $.getJSON("/getUpdate", function(data){
-//           console.log(data);
-//           if(!data.sended){
-//             console.log(data.update);
-//             if(data.update.indexOf('fly') > -1){
-//               console.log(data.x+" "+data.y);
-//               var location = ol.proj.transform([parseFloat(data.x), parseFloat(data.y)], 'EPSG:4326', 'EPSG:3857');
-//               doBounce(location);
-//             }else if(data.update.indexOf('filter') > -1){
-              
-//               var overlays = map.getOverlays();
-//               console.log("overlays " +overlays.getLength());
-//               while(overlays.getLength() > 0){
-//                 overlays.forEach(function(overl){
-//                   console.log(overl);
-//                   map.removeOverlay(overl);
-//                 });    
-//                 overlays = map.getOverlays();
-//               }
-              
-//               data.acont.forEach(function(item){
-//                 var coord = [parseFloat(item.coordenadas[0]), parseFloat(item.coordenadas[1])];
-//                 console.log(coord);
-//                 var div = document.createElement("div");
-//                 var img = document.createElement("img");
-//                 img.src = "images/icon.png";
-//                 div.appendChild(img);
-                
-//                 var overlay = new ol.Overlay({
-//                   element : div,
-//                   positioning : 'bottom-center'
-//                 });
-                  
-//                 var pos = ol.proj.transform(coord, 'EPSG:4326', 'EPSG:3857');
-//                 overlay.setPosition(pos);
-//                 map.addOverlay(overlay);
-//               });
-//             }else if(data.update.indexOf('zoom') > -1){
-//               var zoom = ol.animation.zoom({
-//                 resolution: map.getView().getResolution()
-//               });
-//               map.beforeRender(zoom);
-//               view.setZoom(data.zoom);
-//             }
-            
-//           }
-//         });
-//         setTimeout(getUpdate, 1000);
-//       }
-  	function addOverlay(coord){
-  		var div = document.createElement("div");
-  		var img = document.createElement("img");
-  		img.src = "images/icon.png";
-  		div.appendChild(img);
-  		
-  		var overlay = new ol.Overlay({
-        	element : div,
-			positioning : 'bottom-center'
-		});  	
-	  	var pos = ol.proj.transform(coord, 'EPSG:4326', 'EPSG:3857');
-		overlay.setPosition(pos);
-        map.addOverlay(overlay);
-        return overlay;
-  	}
-  	
-  	function removeOverlay(overlay){
-  		map.removeOverlay(overlay);
-  	}
-    
-      
-      function doBounce(location) {
-        // bounce by zooming out one level and back in
-        var bounce = ol.animation.bounce({
-          resolution: map.getView().getResolution() * 3,
-          duration: 2000
-        });
-        // start the pan at the current center of the map
-        var pan = ol.animation.pan({
-          source: map.getView().getCenter()
-        });
-        map.beforeRender(bounce);
-        map.beforeRender(pan);
-        // when we set the center to the new location, the animated move will
-        // trigger the bounce and pan effects
-        map.getView().setCenter(location);
-      }
-      
-      function doPan(location) {
-        // pan from the current center
-        var pan = ol.animation.pan({
-          source: map.getView().getCenter()
-        });
-        map.beforeRender(pan);
-        // when we set the new location, the map will pan smoothly to it
-        map.getView().setCenter(location);
-      }
-     
-     // Con true aumenta el zoom, con false decrementa
-     function setZoom(zoomIn){
-     	var zoom = ol.animation.zoom({
-        	resolution: map.getView().getResolution()
-        });
-        map.beforeRender(zoom);
-        if(zoomIn){
-        	view.setZoom(view.getZoom()+1);
-        }else{
-        	view.setZoom(view.getZoom()-1);
-        }        
-     }	
 
 
-</script>
 
 
 </body>
+<script type="text/javascript" src="/javascripts/map.js"></script>
+   
+<script type="text/javascript">	  
+    var openContentModal = function(){
+    	$('#contentModal').modal('show');
+    }
+      
+    var control;
+    var openControl = function() {
+  		control = window.open("control2.html", "windowName", "resizable=yes");
+	}
+
+	window.onload = function(){
+    	getUpdate();
+    }  
+</script>
 </html>

@@ -23,6 +23,7 @@ public class Util {
 				.put("titulo", acontecimiento.getTitulo())
 				.put("categoria", acontecimiento.getCategoria())
 				.put("coordenadas", coords)
+				.put("zoom", acontecimiento.getZoom())
 				.put("contenido", acontecimiento.getContenido())
 				.put("id", acontecimiento.getId())
 				.put("dia", acontecimiento.getDia())
