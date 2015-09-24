@@ -3,7 +3,9 @@
 	<persistence-unit name="VertxJPA" transaction-type="RESOURCE_LOCAL">
 		<provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
 		<class>model.Acontecimiento</class>
-		<class>model.LineaDeTiempo</class>		
+		<class>model.LineaDeTiempo</class>
+		<class>model.Imagen</class>	
+		<class>model.AcontecimientoImagen</class>	
 		<properties>
 			<property name="javax.persistence.jdbc.url" value="jdbc:sqlite:./db/kronosdb.sqlite"/>
 			<property name="javax.persistence.jdbc.user" value=""/>

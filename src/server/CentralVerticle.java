@@ -8,6 +8,7 @@ import server.handler.control.FlyToHandler;
 import server.handler.control.GetUpdateHandler;
 import server.handler.control.YearFilterHandler;
 import server.handler.db.AddAcontecimientoHandler;
+import server.handler.db.FileUploadHandler;
 import server.handler.db.FindAllAcontecimientosHandler;
 import server.handler.db.FindLineaDeTiempoHandler;
 import server.handler.db.SaveLineaDeTiempoHandler;
@@ -38,6 +39,8 @@ public class CentralVerticle extends AbstractVerticle {
 		
 		Router router = Router.router(vertx);
 		Route routeAdd = router.route("/db/add").handler(new AddAcontecimientoHandler());
+		Route routeFile = router.route("/file").handler(new FileUploadHandler());
+
 		Route getDataByYear = router.route("/db/getDataByYear").handler(new DataByYearHandler());
 		Route saveLineaDeTiempo = router.route("/db/saveLineaDeTiempo").handler(new SaveLineaDeTiempoHandler());
 		Route findAllAcontecimientos = router.route("/db/findAll").handler(new FindAllAcontecimientosHandler());

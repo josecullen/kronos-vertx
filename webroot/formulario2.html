@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head>
+<meta charset="UTF-8">
+<link rel='stylesheet' href='/bootstrap/dist/css/bootstrap.min.css'>
+<script type="text/javascript" src="/javascripts/jquery-ui-1.10.4.custom/js/jquery-1.10.2.js"></script>
+<script type="text/javascript" src="/javascripts/jquery-ui-1.11.4.custom/jquery-ui.min.js"></script>
+<script type="text/javascript" src="/javascripts/ol.js"></script>
+<script type="text/javascript" src="/javascripts/angular.min.js"></script> 
+<script type="text/javascript" src="/bootstrap/dist/js/bootstrap.min.js"></script>
+    
+<link rel='stylesheet' href='/stylesheets/style.css'>
+<link rel="stylesheet" href="/stylesheets/ol.css" type="text/css">
+<link rel="stylesheet" type="text/css" href="/stylesheets/samples.css">
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<title>Administrador de Entradas</title>
+
+</head>
+<body>
+<div>
+	<ul class="nav nav-tabs" role="tablist">
+    	<li role="presentation" class="active">
+        	<a id="home" href="#home" aria-controls="home" role="tab" data-toggle="tab">Acontecimiento</a>
+      	</li>
+      	<li role="presentation">
+        	<a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Línea de Tiempo</a>
+      	</li>
+    </ul>
+    <div class="tab-content" ng-controller="formCtrl">
+    	
+    	<div role="tabpanel" class="tab-pane active" id="home">	
+			<form name="acontecimientoForm" novalidate>
+    
+		    	<div class="form-group">
+		  
+			        <label>Título </label>
+			        <input type="text" class="form-control" name="titulo" ng-model="acontecimiento.titulo" required>
+		        	
+		        	<label>Fecha </label>
+			        <input type="date" class="form-control" name="fecha" ng-model="acontecimiento.fecha" required>
+		        
+		        	<label>Imagen </label>
+			        <input type="file" class="form-control" name="fecha" onchange="angular.element(this).scope().fileNameChanged(this)" ng-model="acontecimiento.imagen" accept="image/*" required>
+		            
+		            <div class="media">
+			            <div class="media-left">
+						    <a href="#">
+			            		<img style="width:200px" ng-src="{{acontecimiento.imagen}}" >
+						    </a>
+						</div>
+						<div class="media-body"> 
+							<h4 class="media-heading">Contenido</h4>
+							<input type="TextBox" class="form-control" name="fecha" ng-model="acontecimiento.contenido" required>
+						</div>
+		            </div>
+		                
+			        
+<!-- 			        <label>Contenido </label> -->
+<!-- 			        <input type="TextBox" class="form-control" name="fecha" ng-model="acontecimiento.contenido" required> -->
+
+			        <label>Fecha </label>
+			        <input type="date" class="form-control" name="fecha" ng-model="acontecimiento.fecha" required>
+			        
+			        
+		      	</div>
+      
+   			</form>
+		</div>
+		
+		
+		
+		
+		<div role="tabpanel" class="tab-pane" id="profile">
+			
+      	</div>
+	</div>
+</div>
+
+
+</body>
+
+<script type="text/javascript">
+	var app = angular.module('myApp', []);
+	app.controller('formCtrl', function($scope) {
+	    $scope.master = {titulo: "", contenido: "", imagen: "",  categoria: "", fecha: "", coordenadas: {x: 0, y:0}};
+	    $scope.reset = function() {
+	        $scope.acontecimiento = angular.copy($scope.master);
+	    };
+	    printAcontecimiento = function(){
+	    	console.log($scope.acontecimiento);
+	    }
+	    $scope.reset();
+	    $scope.$watch('acontecimiento', printAcontecimiento, true);
+ 	    $scope.$watch('acontecimiento.imagen', printAcontecimiento, true);
+	    
+	    $scope.fileNameChanged = function(element) {
+		  if (element.files && element.files[0]) {
+            var reader = new FileReader();
+            
+            reader.onload = function (e) {
+                $scope.acontecimiento.imagen = e.target.result;
+            }
+            
+            reader.readAsDataURL(element.files[0]);
+        }
+		  
+		  console.log("select file "+element.value);
+		  console.log(element);
+		  console.log('files:', element.files[0]);
+		}
+	});	
+	
+
+	
+</script>
+</html>

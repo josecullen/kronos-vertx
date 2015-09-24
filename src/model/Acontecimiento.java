@@ -1,7 +1,9 @@
 package model;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
+
 import java.util.List;
 
 
@@ -10,35 +12,28 @@ import java.util.List;
  * 
  */
 @Entity
-@NamedQueries({
-	@NamedQuery(name="Acontecimiento.findAll", query="SELECT a FROM Acontecimiento a"),
-	@NamedQuery(name="Acontecimiento.findByYear", query="SELECT a FROM Acontecimiento a WHERE a.año = :año"),
-	@NamedQuery(name="Acontecimiento.findById", query="SELECT a FROM Acontecimiento a WHERE a.id = :id")
-
-})
-
+@NamedQuery(name="Acontecimiento.findAll", query="SELECT a FROM Acontecimiento a")
 public class Acontecimiento implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@SequenceGenerator(name="ACONTECIMIENTO_ID_GENERATOR", sequenceName="SEQ_ACONTECIMIENTO_ID")
+	@SequenceGenerator(name="ACONTECIMIENTO_ID_GENERATOR", sequenceName="SEQ_ACONTECIMIENTO")
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="ACONTECIMIENTO_ID_GENERATOR")
 	@Column(name="ID")
-	private long id;
+	private long id;	
 	
-	private String contenido;
+	
+	private int año;
+
 	private String categoria;
+
+	private String contenido;
 
 	@Column(name="COORD_X")
 	private double coordX;
 
 	@Column(name="COORD_Y")
 	private double coordY;
-	
-	@Column(name="ZOOM")
-	private int zoom;
-	
-	private int año;
 
 	private int dia;
 
@@ -46,7 +41,48 @@ public class Acontecimiento implements Serializable {
 
 	private String titulo;
 
-	//bi-directional many-to-many association to LineaDeTiempo
+	private int zoom;
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(long id) {
+		this.id = id;
+	}
+
+	//bi-directional many-to-many association to Imagen
+//	@ManyToMany
+//	@JoinTable(
+//		name="ACONTECIMIENTO_IMAGEN"
+//		, joinColumns={
+//			@JoinColumn(name="ID_ACONTECIMIENTO", referencedColumnName="ID")
+//			}
+//		, inverseJoinColumns={
+//			@JoinColumn(name="ID_IMAGEN", referencedColumnName="ID")
+//			}
+//		)
+//	private List<Imagen> imagens;
+//	public List<Imagen> getImagens() {
+//		return this.imagens;
+//	}
+//
+//	public void setImagens(List<Imagen> imagens) {
+//		this.imagens = imagens;
+//	}
+	
+
+	@OneToMany(mappedBy="acontecimiento")
+	private List<AcontecimientoImagen> acontecimientoImagenes;		
+	public List<AcontecimientoImagen> getAcontecimientoImagenes() {
+		return acontecimientoImagenes;
+	}
+	public void setAcontecimientoImagenes(List<AcontecimientoImagen> acontecimientoImagenes) {
+		this.acontecimientoImagenes = acontecimientoImagenes;
+	}
+	
+	
+
 	@ManyToMany
 	@JoinTable(
 		name="LINEA_ACONTECIMIENTO"
@@ -58,25 +94,18 @@ public class Acontecimiento implements Serializable {
 			}
 		)
 	private List<LineaDeTiempo> lineaDeTiempos;
-
-	public Acontecimiento() {
-	}
-
-	public long getId() {
-		return id;
-	}
 	
-	public String getCategoria() {
-		return categoria;
+	
+	
+	public List<LineaDeTiempo> getLineaDeTiempos() {
+		return lineaDeTiempos;
 	}
 
-	public void setCategoria(String categoria) {
-		this.categoria = categoria;
+	public void setLineaDeTiempos(List<LineaDeTiempo> lineaDeTiempos) {
+		this.lineaDeTiempos = lineaDeTiempos;
 	}
 
-	public void setId(long id) {
-		this.id = id;
-	}
+	public Acontecimiento() {}
 
 	public int getAño() {
 		return this.año;
@@ -84,6 +113,14 @@ public class Acontecimiento implements Serializable {
 
 	public void setAño(int año) {
 		this.año = año;
+	}
+
+	public String getCategoria() {
+		return this.categoria;
+	}
+
+	public void setCategoria(String categoria) {
+		this.categoria = categoria;
 	}
 
 	public String getContenido() {
@@ -134,20 +171,14 @@ public class Acontecimiento implements Serializable {
 		this.titulo = titulo;
 	}
 
-	public List<LineaDeTiempo> getLineaDeTiempos() {
-		return this.lineaDeTiempos;
-	}
-
-	public void setLineaDeTiempos(List<LineaDeTiempo> lineaDeTiempos) {
-		this.lineaDeTiempos = lineaDeTiempos;
-	}
-
 	public int getZoom() {
-		return zoom;
+		return this.zoom;
 	}
 
 	public void setZoom(int zoom) {
 		this.zoom = zoom;
 	}
+
+	
 
 }

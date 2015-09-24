@@ -1,20 +1,45 @@
 <!DOCTYPE html>
-<html ng-app="myApp" ng-controller="formCtrl">
+<html>
 <head>
 <meta charset="UTF-8">
 <link rel='stylesheet' href='/bootstrap/dist/css/bootstrap.min.css'>
 <script type="text/javascript" src="/javascripts/jquery-ui-1.10.4.custom/js/jquery-1.10.2.js"></script>
 <script type="text/javascript" src="/javascripts/jquery-ui-1.11.4.custom/jquery-ui.min.js"></script>
-    <script type="text/javascript" src="/javascripts/ol.js"></script>
-    <script type="text/javascript" src="/javascripts/angular.min.js"></script> <script type="text/javascript" src="/bootstrap/dist/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/javascripts/ol.js"></script>
+<script type="text/javascript" src="/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/javascripts/angular.min.js"></script>    
+
 <link rel='stylesheet' href='/stylesheets/style.css'>
 <link rel="stylesheet" href="/stylesheets/ol.css" type="text/css">
 <link rel="stylesheet" type="text/css" href="/stylesheets/samples.css">
 <meta name="viewport" content="width=device-width, initial-scale=1" />
+<style type="text/css">
+/* Styles go here */
 
-<title>Administrador de Entradas</title>
+.btn-file {
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-file input[type=file] {
+  position: absolute;
+  top: 0;
+  right: 0;
+  min-width: 100%;
+  min-height: 100%;
+  font-size: 100px;
+  text-align: right;
+  filter: alpha(opacity=0);
+  opacity: 0;
+  outline: none;
+  background: white;
+  cursor: inherit;
+  display: block;
+}
+</style>
+<title>Insert title here</title>
 </head>
-<body>
+<body ng-app='app' ng-controller="imgController" >
 <div>
 	<ul class="nav nav-tabs" role="tablist">
     	<li role="presentation" class="active">
@@ -26,56 +51,73 @@
     </ul>
     <div class="tab-content">
     	<div role="tabpanel" class="tab-pane active" id="home">	
-			<form action="/db/add" method="GET" class="navbar-form navbar-left">		
+			<form ng-submit="processForm()"  class="navbar-form navbar-left col-xl-3 col-lg-3 col-xs-3 col-md-3">		
 				<div class="input-group" style="width: 100%">
 					<span class="input-group-addon" id="basic-addon1">Título</span> 
-					<input ng-model="acontecimiento.titulo" type="text" name="titulo" class="form-control" placeholder="Batalla de San Lorenzo" aria-describedby="basic-addon1">
+					<input type="text" name="titulo" ng-model="acontecimiento.titulo" class="form-control" placeholder="Batalla de San Lorenzo" aria-describedby="basic-addon1">
 				</div>
 				<p></p>
 				<div class="input-group" style="width: 100%">
 					<span class="input-group-addon" id="basic-addon1">Fecha</span> 
-					<input ng-model="acontecimiento.fecha.dia" type="number" name="dia" class="form-control" placeholder="Día"	aria-describedby="basic-addon1">
-					<input ng-model="acontecimiento.fecha.mes" type="number" name="mes" class="form-control" placeholder="Mes"	aria-describedby="basic-addon1">
-					<input ng-model="acontecimiento.fecha.ano" type="number" name="ano" class="form-control" placeholder="Año"	aria-describedby="basic-addon1">
+					<input type="date" name="fecha" ng-model="acontecimiento.date" class="form-control" aria-describedby="basic-addon1">
 				</div>
 				<p></p>
 				<div class="input-group">
 					<span class="input-group-addon" id="basic-addon1">Coordenadas</span>
-					<input ng-model="acontecimiento.coordenadas.x" type="number" id="x" name="coordenadaX" step="0.01"	class="form-control" placeholder="37,35" aria-describedby="basic-addon1"> 
+					<input type="number" id="x" ng-model="acontecimiento.coordenadas.x" ng-change="update()" name="coordenadaX" step="0.01"	class="form-control" placeholder="37,35" aria-describedby="basic-addon1"> 
 					<span class="input-group-addon" id="basic-addon1">x</span> 
-					<input ng-model="acontecimiento.coordenadas.y" type="number" id="y" name="coordenadaY" step="0.01" class="form-control" placeholder="15,48" aria-describedby="basic-addon1"> 
+					<input type="number" id="y" name="coordenadaY" ng-model="acontecimiento.coordenadas.y" step="0.01" class="form-control" placeholder="15,48" aria-describedby="basic-addon1"> 
 					<span class="input-group-addon" id="basic-addon1">y</span>
 				</div>
 				<p></p>
 				<div class="input-group" style="width: 100%">
-					<span class="input-group-addon" id="basic-addon1">Título</span> 
-					<input ng-model="acontecimiento.imagen" type="file" name="imagen" class="form-control" aria-describedby="basic-addon1">
-				</div>
-				<div class="input-group" style="width: 100%">
 					<span class="input-group-addon" id="basic-addon1">Contenido</span>
-					<textarea ng-model="acontecimiento.contenido" class="form-control" name="contenido" rows="8" aria-describedby="basic-addon1"></textarea>
+					<textarea ng-model="acontecimiento.contenido" class="form-control" name="contenido" rows="8"
+						aria-describedby="basic-addon1"></textarea>
 				</div>
 				<p>
-				<div class="input-group">
-					<span class="input-group-addon" id="basic-addon1">Categoria</span>
-		                <input ng-model="acontecimiento.categoria" name="categoria" type="TextBox" ID="datebox" Class="form-control">
-		                <div class="input-group-btn">
-		                	<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-		                    	<span class="caret"></span>
-		                  	</button>
-		                  	<ul id="demolist" class="dropdown-menu">
-		                    	<li><a href="#">Historia</a></li>
-			                    <li><a href="#">Música</a></li>
-			                    <li><a href="#">Geografía</a></li>
-			                  </ul>
-		                </div>
-		        </div>
+<!-- 				<div class="input-group"> -->
+<!-- 					<span class="input-group-addon" id="basic-addon1">Categoria</span> -->
+<!-- 		                <input name="categoria" type="TextBox" ID="datebox" Class="form-control"> -->
+<!-- 		                <div class="input-group-btn"> -->
+<!-- 		                	<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"> -->
+<!-- 		                    	<span class="caret"></span> -->
+<!-- 		                  	</button> -->
+<!-- 		                  	<ul id="demolist" class="dropdown-menu"> -->
+<!-- 		                    	<li><a href="#">Historia</a></li> -->
+<!-- 			                    <li><a href="#">Música</a></li> -->
+<!-- 			                    <li><a href="#">Geografía</a></li> -->
+<!-- 			                  </ul> -->
+<!-- 		                </div> -->
+<!-- 		        </div> -->
+		        <div class="row" ng-repeat="image in acontecimiento.images">
+				    <div class="col-xl-3 col-lg-3 col-xs-3 col-md-3">
+				      <a href="#" class="thumbnail"  ng-if="image.imgSrc">
+				        <img id="blah" class="form-control" ng-src="{{image.imgSrc}}"  >
+				      </a>
+				      <span class="btn btn-default btn-file">
+				      Browse Image <input type="file"  id="{{$index}}" ng-model="image.image" onchange="angular.element(this).scope().fileNameChanged(this, angular.element(this))">
+				      </span>
+				    </div>
+				    <div class="col col-xl-8 col-lg-8 col-xs-8 col-md-8">
+				      <input type="text" class="form-control" ng-model="image.title" placeholder="Título">
+				      <textarea class="form-control" rows="5" cols="50" ng-model="image.content" placeholder="Contenido"></textarea>
+				    </div>
+				    <button ng-if="$last" ng-click="newItem();" class="btn btn-primary glyphicon glyphicon-plus col-sm-1 col-xl-1 col-lg-1"></button>
+				    <button ng-if="!$last" ng-click="removeItem($index);" class="btn btn-danger glyphicon glyphicon-minus col-sm-1 col-xl-1 col-lg-1"></button>
+				</div>
 				<p></p>
+				
+								<button type="button"  class="btn btn-default" ng-click="update()">Update</button>
+				
 				<button type="submit" class="btn btn-default">Submit</button>
 				<br><br>
 				<div id="map" class="map" style="height: 300px; width: 100%;"></div>
 				<div id="overlay" style="background-color: white; border-radius: 10px; border: 1px solid black; padding: 5px 10px;"></div>
 			</form>
+			<pre>
+<!-- 		    {{ acontecimiento }} -->
+			</pre>
 		</div>
 		<div role="tabpanel" class="tab-pane" id="profile">
 			<div class="col-md-5">
@@ -112,20 +154,78 @@
 </body>
 
 <script type="text/javascript">
-	var app = angular.module('myApp', []);
-	app.controller('formCtrl', function($scope) {
-	    $scope.master = {titulo: "", contenido: "", categoria: "", fecha: {dia: 25, mes: 5, ano: 1810}, coordenadas: {x: 0, y:0}};
-	    $scope.reset = function() {
-	        $scope.acontecimiento = angular.copy($scope.master);
-	    };
-	    printAcontecimiento = function(){
-	    	console.log($scope.acontecimiento);
+	
+angular.module('app', []).controller('imgController',function($scope, $http){
+	$scope.acontecimiento = {coordenadas: {x: '', y: ''}};
+	
+	$scope.acontecimiento.images = [{
+	    imgSrc: '',
+	    content: '',
+	    title: '',
+	    image: ''
+	}];
+	  
+	$scope.imgSrc = "";
+
+	$scope.update = function(){
+		$scope.acontecimiento.coordenadas.x = parseFloat($('#x').val());
+		$scope.acontecimiento.coordenadas.y = parseFloat($('#y').val());
+	}
+	
+	$scope.fileNameChanged = function(input, index){
+	    if (input.files && input.files[0]) {
+	      var reader = new FileReader();
+	      reader.onload = function(e) {
+	         $scope.imgSrc = e.target.result;
+// 	         console.log(e);
+// 	         console.log(e.target.readAsBinaryString());
+	         $scope.acontecimiento.images[index[0].id].imgSrc = e.target.result;
+	         $scope.$apply();
+	      }
+	      reader.readAsDataURL(input.files[0]);
 	    }
-	    $scope.reset();
-	    $scope.$watch('acontecimiento', printAcontecimiento, true);
-	    $scope.$watch('acontecimiento.coordenadas.x', printAcontecimiento, true);
-	    
-	});
+	};
+	  
+	$scope.newItem = function() {
+	    $scope.acontecimiento.images.push({
+	      imgSrc: '',
+	      content: '',
+	      title: '',
+	      image: ''
+		});
+	};
+	$scope.removeItem = function(index) {
+		$scope.acontecimiento.images.splice(index, 1);
+	};
+	
+	$scope.processForm = function() {
+		
+		$scope.update();  
+// 		console.log($.param($scope.acontecimiento));
+		console.log($scope.acontecimiento);
+
+		$http({
+		  method  : 'POST',
+		  url     : '/db/add',
+		  data    : $scope.acontecimiento,  // pass in data as strings
+		  headers : { 'Content-Type': 'application/json' }  // set the headers so angular passing info as form data (not request payload)
+		 })
+		  .success(function(data) {
+		    console.log(data);
+		    if (!data.success) {
+		      	// if not successful, bind errors to error variables
+// 			    $scope.errorName = data.errors.name;
+// 			    $scope.errorSuperhero = data.errors.superheroAlias;
+		  } else {
+// 	      		$scope.message = data.message;
+	    	}
+	  });
+	};
+
+	  
+	  
+});
+	
 	
 	
 	$('#home a').click(function(e) {
