@@ -3,7 +3,10 @@ package server.handler.db;
 import java.util.ArrayList;
 import java.util.List;
 
+import model.Acontecimiento;
+import model.AcontecimientoImagen;
 import model.Imagen;
+import service.AcontecimientoImagenService;
 import service.AcontecimientoService;
 import service.ImagenService;
 import utils.Globals;
@@ -17,6 +20,8 @@ public class FileUploadHandler implements Handler<RoutingContext> {
 	String titulo;
 	ImagenService imagenService = new ImagenService(Globals.em);
 	AcontecimientoService acontecimientoService = new AcontecimientoService(Globals.em);
+	AcontecimientoImagenService acontImgService = new AcontecimientoImagenService(Globals.em);
+	
 	List<Imagen> imagenes = new ArrayList<Imagen>();
 	@Override
 	public void handle(RoutingContext routingContext) {
@@ -25,13 +30,24 @@ public class FileUploadHandler implements Handler<RoutingContext> {
 		req.endHandler(a->{
 			MultiMap formAttributes = req.formAttributes();
       		System.out.println("endHandler formAttributes: "+ formAttributes);
+            
+      		Globals.em.getTransaction().begin();
+      		Acontecimiento acontecimiento = acontecimientoService.create(formAttributes.get("titulo"));
+      		acontecimiento.setContenido(formAttributes.get("titulo"));
+      		acontecimiento.setCoordX(Double.parseDouble(formAttributes.get("coordenadaX")));
+      		acontecimiento.setCoordY(Double.parseDouble(formAttributes.get("coordenadaY")));
+//            Globals.em.getTransaction().commit();
+//      		Globals.em.getTransaction().begin();
 
-      		titulo = formAttributes.get("titulo");
-            Globals.em.getTransaction().begin();
-            imagenes.forEach(imagen -> {
-            	imagen.setTitulo(titulo);
-            	Globals.em.merge(imagen);	
-            });            
+            for(int i = 0; i < imagenes.size(); i++){
+            	imagenes.get(i).setTitulo(formAttributes.get("imgTitulo"+i));
+            	imagenes.get(i).setCopete(formAttributes.get("imgContenido"+i));
+            	AcontecimientoImagen acontecimientoImagen = acontImgService.create(imagenes.get(i), acontecimiento, i);
+            	imagenes.get(i).getAcontecimientoImagenes().add(acontecimientoImagen);
+            	Globals.em.merge(imagenes.get(i));
+            }
+            
+            
             Globals.em.getTransaction().commit();
 		});
 		

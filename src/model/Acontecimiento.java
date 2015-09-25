@@ -17,7 +17,7 @@ public class Acontecimiento implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@SequenceGenerator(name="ACONTECIMIENTO_ID_GENERATOR", sequenceName="SEQ_ACONTECIMIENTO")
+	@SequenceGenerator(name="ACONTECIMIENTO_ID_GENERATOR", sequenceName="SEQ_ACONTECIMIENTO_ID", initialValue=1, allocationSize=1)
 	@GeneratedValue(strategy=GenerationType.SEQUENCE, generator="ACONTECIMIENTO_ID_GENERATOR")
 	@Column(name="ID")
 	private long id;	

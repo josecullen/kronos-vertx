@@ -23,19 +23,18 @@ public class AcontecimientoImagen implements Serializable {
 
 
 	@ManyToOne
-	@PrimaryKeyJoinColumn(name="ACONTECIMIENTO_ID", referencedColumnName="ID")
+	@JoinColumn(name="ID_ACONTECIMIENTO")
 	private Acontecimiento acontecimiento;
 	
 	@ManyToOne
-	@PrimaryKeyJoinColumn(name="IMAGEN_ID", referencedColumnName="ID")
+	@JoinColumn(name="ID_IMAGEN")
 	private Imagen imagen;
 	
 	
-
+	@Column(name="ORDEN")
 	private int orden;
 
-	public AcontecimientoImagen() {
-	}
+	public AcontecimientoImagen() {	}
 
 	public int getId() {
 		return this.id;

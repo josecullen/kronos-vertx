@@ -51,73 +51,64 @@
     </ul>
     <div class="tab-content">
     	<div role="tabpanel" class="tab-pane active" id="home">	
-			<form ng-submit="processForm()"  class="navbar-form navbar-left col-xl-3 col-lg-3 col-xs-3 col-md-3">		
+			
+			<form action="/file" ENCTYPE="multipart/form-data" method="POST" class="navbar-form navbar-left col-xl-3 col-lg-3 col-xs-3 col-md-3">		
+				
 				<div class="input-group" style="width: 100%">
 					<span class="input-group-addon" id="basic-addon1">Título</span> 
 					<input type="text" name="titulo" ng-model="acontecimiento.titulo" class="form-control" placeholder="Batalla de San Lorenzo" aria-describedby="basic-addon1">
 				</div>
-				<p></p>
+				
 				<div class="input-group" style="width: 100%">
 					<span class="input-group-addon" id="basic-addon1">Fecha</span> 
 					<input type="date" name="fecha" ng-model="acontecimiento.date" class="form-control" aria-describedby="basic-addon1">
 				</div>
-				<p></p>
-				<div class="input-group">
+				
+				<div class="input-group" style="width: 100%">
 					<span class="input-group-addon" id="basic-addon1">Coordenadas</span>
-					<input type="number" id="x" ng-model="acontecimiento.coordenadas.x" ng-change="update()" name="coordenadaX" step="0.01"	class="form-control" placeholder="37,35" aria-describedby="basic-addon1"> 
+					<input type="number" id="x" ng-model="acontecimiento.coordenadas.x" name="coordenadaX" step="0.01"	class="form-control" placeholder="37,35" aria-describedby="basic-addon1"> 
 					<span class="input-group-addon" id="basic-addon1">x</span> 
-					<input type="number" id="y" name="coordenadaY" ng-model="acontecimiento.coordenadas.y" step="0.01" class="form-control" placeholder="15,48" aria-describedby="basic-addon1"> 
+					<input type="number" id="y" ng-model="acontecimiento.coordenadas.y" name="coordenadaY" step="0.01" class="form-control" placeholder="15,48" aria-describedby="basic-addon1"> 
 					<span class="input-group-addon" id="basic-addon1">y</span>
 				</div>
-				<p></p>
+
 				<div class="input-group" style="width: 100%">
 					<span class="input-group-addon" id="basic-addon1">Contenido</span>
-					<textarea ng-model="acontecimiento.contenido" class="form-control" name="contenido" rows="8"
+					<textarea 
+						ng-model="acontecimiento.contenido" 
+						class="form-control" 
+						name="contenido" 
+						rows="8"
 						aria-describedby="basic-addon1"></textarea>
 				</div>
-				<p>
-<!-- 				<div class="input-group"> -->
-<!-- 					<span class="input-group-addon" id="basic-addon1">Categoria</span> -->
-<!-- 		                <input name="categoria" type="TextBox" ID="datebox" Class="form-control"> -->
-<!-- 		                <div class="input-group-btn"> -->
-<!-- 		                	<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"> -->
-<!-- 		                    	<span class="caret"></span> -->
-<!-- 		                  	</button> -->
-<!-- 		                  	<ul id="demolist" class="dropdown-menu"> -->
-<!-- 		                    	<li><a href="#">Historia</a></li> -->
-<!-- 			                    <li><a href="#">Música</a></li> -->
-<!-- 			                    <li><a href="#">Geografía</a></li> -->
-<!-- 			                  </ul> -->
-<!-- 		                </div> -->
-<!-- 		        </div> -->
-		        <div class="row" ng-repeat="image in acontecimiento.images">
+				
+		        <div class="row jumbotron" ng-repeat="image in acontecimiento.images">
 				    <div class="col-xl-3 col-lg-3 col-xs-3 col-md-3">
 				      <a href="#" class="thumbnail"  ng-if="image.imgSrc">
 				        <img id="blah" class="form-control" ng-src="{{image.imgSrc}}"  >
 				      </a>
 				      <span class="btn btn-default btn-file">
-				      Browse Image <input type="file"  id="{{$index}}" ng-model="image.image" onchange="angular.element(this).scope().fileNameChanged(this, angular.element(this))">
+				      Cargar Imagen <input type="file"  id="{{$index}}" name="img{{$index}}" ng-model="image.image" onchange="angular.element(this).scope().fileNameChanged(this, angular.element(this))">
 				      </span>
-				    </div>
+				    </div>    
+					
 				    <div class="col col-xl-8 col-lg-8 col-xs-8 col-md-8">
-				      <input type="text" class="form-control" ng-model="image.title" placeholder="Título">
-				      <textarea class="form-control" rows="5" cols="50" ng-model="image.content" placeholder="Contenido"></textarea>
+				      	<div class="input-group" style="width: 100%">
+							<span class="input-group-addon" id="basic-addon1">Título Imagen</span> 
+							<input type="text" name="imgTitulo{{$index}}" ng-model="image.title" class="form-control" aria-describedby="basic-addon1">
+						</div>
+					    <textarea class="form-control" rows="5" name="imgContenido{{$index}}" style="width: 100%" ng-model="image.content" placeholder="Contenido"></textarea>
 				    </div>
+				    
 				    <button ng-if="$last" ng-click="newItem();" class="btn btn-primary glyphicon glyphicon-plus col-sm-1 col-xl-1 col-lg-1"></button>
 				    <button ng-if="!$last" ng-click="removeItem($index);" class="btn btn-danger glyphicon glyphicon-minus col-sm-1 col-xl-1 col-lg-1"></button>
 				</div>
-				<p></p>
-				
-								<button type="button"  class="btn btn-default" ng-click="update()">Update</button>
-				
+						
 				<button type="submit" class="btn btn-default">Submit</button>
-				<br><br>
 				<div id="map" class="map" style="height: 300px; width: 100%;"></div>
 				<div id="overlay" style="background-color: white; border-radius: 10px; border: 1px solid black; padding: 5px 10px;"></div>
 			</form>
-			<pre>
-<!-- 		    {{ acontecimiento }} -->
-			</pre>
+
 		</div>
 		<div role="tabpanel" class="tab-pane" id="profile">
 			<div class="col-md-5">
@@ -177,8 +168,6 @@ angular.module('app', []).controller('imgController',function($scope, $http){
 	      var reader = new FileReader();
 	      reader.onload = function(e) {
 	         $scope.imgSrc = e.target.result;
-// 	         console.log(e);
-// 	         console.log(e.target.readAsBinaryString());
 	         $scope.acontecimiento.images[index[0].id].imgSrc = e.target.result;
 	         $scope.$apply();
 	      }
@@ -194,33 +183,11 @@ angular.module('app', []).controller('imgController',function($scope, $http){
 	      image: ''
 		});
 	};
+	
 	$scope.removeItem = function(index) {
 		$scope.acontecimiento.images.splice(index, 1);
 	};
 	
-	$scope.processForm = function() {
-		
-		$scope.update();  
-// 		console.log($.param($scope.acontecimiento));
-		console.log($scope.acontecimiento);
-
-		$http({
-		  method  : 'POST',
-		  url     : '/db/add',
-		  data    : $scope.acontecimiento,  // pass in data as strings
-		  headers : { 'Content-Type': 'application/json' }  // set the headers so angular passing info as form data (not request payload)
-		 })
-		  .success(function(data) {
-		    console.log(data);
-		    if (!data.success) {
-		      	// if not successful, bind errors to error variables
-// 			    $scope.errorName = data.errors.name;
-// 			    $scope.errorSuperhero = data.errors.superheroAlias;
-		  } else {
-// 	      		$scope.message = data.message;
-	    	}
-	  });
-	};
 
 	  
 	  
