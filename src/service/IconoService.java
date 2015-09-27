@@ -6,6 +6,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 
 import model.Icono;
+import model.Imagen;
 
 public class IconoService implements BasicServiceInterface<Icono> {
 	EntityManager em;
@@ -23,8 +24,10 @@ public class IconoService implements BasicServiceInterface<Icono> {
 
 	@Override
 	public Icono create(String name) {
-		// TODO Auto-generated method stub
-		return null;
+		Icono icono = new Icono();
+		icono.setNombre(name);
+		em.persist(icono);
+		return icono;
 	}
 
 	@Override

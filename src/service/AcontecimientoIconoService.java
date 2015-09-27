@@ -7,6 +7,7 @@ import javax.persistence.TypedQuery;
 
 import model.Acontecimiento;
 import model.AcontecimientoIcono;
+import model.Icono;
 
 public class AcontecimientoIconoService implements BasicServiceInterface<AcontecimientoIcono>{
 	EntityManager em;
@@ -28,6 +29,17 @@ public class AcontecimientoIconoService implements BasicServiceInterface<Acontec
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	public AcontecimientoIcono create(Icono icono, Acontecimiento acontecimiento, double x, double y) {
+		AcontecimientoIcono acontecimientoIcono = new AcontecimientoIcono();
+		acontecimientoIcono.setAcontecimiento(acontecimiento);
+		acontecimientoIcono.setIcono(icono);
+		acontecimientoIcono.setCoordX(x);
+		acontecimientoIcono.setCoordY(y);
+		em.persist(acontecimientoIcono);		
+		return acontecimientoIcono;
+	}
+	
 
 	@Override
 	public boolean remove(AcontecimientoIcono entity) {

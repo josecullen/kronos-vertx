@@ -4,11 +4,17 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+
+
 import model.Acontecimiento;
+import model.AcontecimientoIcono;
 import model.AcontecimientoImagen;
+import model.Icono;
 import model.Imagen;
+import service.AcontecimientoIconoService;
 import service.AcontecimientoImagenService;
 import service.AcontecimientoService;
+import service.IconoService;
 import service.ImagenService;
 import utils.Globals;
 import io.vertx.core.Handler;
@@ -22,8 +28,11 @@ public class FileUploadHandler implements Handler<RoutingContext> {
 	ImagenService imagenService = new ImagenService(Globals.em);
 	AcontecimientoService acontecimientoService = new AcontecimientoService(Globals.em);
 	AcontecimientoImagenService acontImgService = new AcontecimientoImagenService(Globals.em);
-	
+	AcontecimientoIconoService acontIconService = new AcontecimientoIconoService(Globals.em);
+	IconoService iconoService = new IconoService(Globals.em);
 	List<Imagen> imagenes = new ArrayList<Imagen>();
+	List<Icono> iconos = new ArrayList<Icono>();
+
 	@Override
 	public void handle(RoutingContext routingContext) {
 		HttpServerRequest req = routingContext.request();
@@ -45,6 +54,15 @@ public class FileUploadHandler implements Handler<RoutingContext> {
             	imagenes.get(i).getAcontecimientoImagenes().add(acontecimientoImagen);
             	Globals.em.merge(imagenes.get(i));
             }
+            
+            for(int j = 0; j < iconos.size(); j++){
+            	Icono icono = iconos.get(j);
+            	icono.setNombre(formAttributes.get("iconTitulo"+j));
+            	double x = Double.parseDouble(formAttributes.get("iconX"+j));
+            	double y = Double.parseDouble(formAttributes.get("iconY"+j));
+            	AcontecimientoIcono acontecimientoIcono = acontIconService.create(icono, acontecimiento, x, y );
+            }
+            
             Globals.em.merge(acontecimiento);
             
             Globals.em.getTransaction().commit();
@@ -53,7 +71,7 @@ public class FileUploadHandler implements Handler<RoutingContext> {
         req.uploadHandler(new Handler<HttpServerFileUpload>() {
           @Override
           public void handle(final HttpServerFileUpload upload) {
-        	  System.out.print("uploadHandler  ");
+        	  System.out.println("uploadHandler  "+upload.name()+"  "+upload.filename());
               long max = imagenService.getMax();
 
               upload.exceptionHandler(new Handler<Throwable>() {
@@ -72,13 +90,30 @@ public class FileUploadHandler implements Handler<RoutingContext> {
 	            		}
 	              }
               });
-              Globals.em.getTransaction().begin();
-              Imagen imagen = imagenService.create("last");
-              imagenes.add(imagen);
-              Globals.em.getTransaction().commit();
               
               String workingDir = System.getProperty("user.dir");
-              File file = new File(workingDir+File.separator+"webroot"+File.separator+"images"+File.separator+"user"+File.separator+imagen.getId());
+              File file;
+              Imagen imagen = null;
+              Icono icono = null;
+              Globals.em.getTransaction().begin();
+              if(upload.name().contains("img")){
+            	  imagen = imagenService.create("last");
+                  imagenes.add(imagen);
+              }else{
+            	  icono = iconoService.create("last");
+            	  iconos.add(icono);
+
+              }
+              
+              Globals.em.getTransaction().commit();
+        	  if(upload.name().contains("img")){
+                  file = new File(workingDir+File.separator+"webroot"+File.separator+"images"+File.separator+"user"+File.separator+imagen.getId());
+        	  }else{
+                  file = new File(workingDir+File.separator+"webroot"+File.separator+"images"+File.separator+"icons"+File.separator+icono.getId());
+        	  }
+              
+
+              
               System.out.println(file.getAbsolutePath());
               
               upload.streamToFileSystem(file.getPath());

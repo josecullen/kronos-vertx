@@ -29,6 +29,13 @@ public class AcontecimientoIcono {
 	@JoinColumn(name="ID_ICONO")
 	private Icono icono;
 
+	@Column(name="COORD_X")
+	private double coordX;
+
+	@Column(name="COORD_Y")
+	private double coordY;
+	
+	
 	public int getId() {
 		return id;
 	}
@@ -49,7 +56,21 @@ public class AcontecimientoIcono {
 		this.icono = icono;
 	}
 	
-	
+	public double getCoordX() {
+		return this.coordX;
+	}
+
+	public void setCoordX(double coordX) {
+		this.coordX = coordX;
+	}
+
+	public double getCoordY() {
+		return this.coordY;
+	}
+
+	public void setCoordY(double coordY) {
+		this.coordY = coordY;
+	}
 	
 	
 	

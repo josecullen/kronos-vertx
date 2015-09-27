@@ -125,7 +125,7 @@ function setZoom(zoomIn){
 function addOverlay(coord){
 	var div = document.createElement("div");
 	var img = document.createElement("img");
-	img.src = "images/icon.png";
+	img.src = "images/mariano-moreno.png";
 	div.appendChild(img);
 	
 	var overlay = new ol.Overlay({

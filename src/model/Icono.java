@@ -22,6 +22,8 @@ public class Icono {
 	
 	private String nombre;
 
+	
+	
 	public long getId() {
 		return id;
 	}
