@@ -24,22 +24,11 @@
 		  });		
 		  map.addLayer(osmLayer);		  
 		}
-		
-		function flyTo(x,y){
-			console.log("flyTo" +x+" "+y);
-	        var location = ol.proj.transform([parseFloat(x), parseFloat(y)], 'EPSG:4326', 'EPSG:3857');
-	        window.opener.doBounce(location);
-		}
-	
-		function fly(coordenadas) {
-			console.log("fly "+coordenadas);
-	        var location = ol.proj.transform(coords, 'EPSG:4326', 'EPSG:3857');
-	        window.opener.doBounce(location);
-	   	};
-		
+
+
 		// Código Angular
 		var app = angular.module('app', []);
-		app.controller('control', function($scope, $http) {
+		app.controller('control', function($scope, $http, $window) {
 		  $scope.linea = {
 		  	acontecimientos: [{
 		  		titulo: "tit",
@@ -55,28 +44,66 @@
 		  $http.get("/db/findLinea?titulo=Otra linea Nueva").success(function(response) {$scope.linea = response;});
 		  
 		  $scope.currentPage = 0;
-		  $scope.pageSize = 3;		  
-		  
-		  $scope.fly = function(acontecimiento) {
-		    console.log("fly angular "+acontecimiento.coordenadas + "zoom: "+acontecimiento.zoom);	        
-	        window.opener.doBounce(acontecimiento, true);
-	   	  };
+		  $scope.pageSize = 3;			 
 	   	  
-	   	  $scope.setAcontecimiento = function(acontecimiento){ $scope.acontecimiento = acontecimiento;  };
+	   	  $scope.setAcontecimiento = function(acontecimiento){ $scope.acontecimiento = acontecimiento;  };   	  
+	   	  
 		});
 		
 		app.controller('toggle', function($scope, $http) {
+	   	  $scope.overlaySpan = {state : false, spanStyle : {'background-color': '#eee'}};
+	   	  $scope.modalSpan = {state : false, spanStyle : {'background-color': '#eee'}};
 
-	   	  $scope.addRemoveOverlay = function(coordenadas){	   	  	
-	   	  	$scope.state = !$scope.state;	   	  	
-	   	  	if($scope.state){
+	   	  $scope.addRemoveOverlay = function(coordenadas){	   	  
+	   	  	console.log($scope.overlaySpan.state);	
+	   	  	$scope.overlaySpan.state = !$scope.overlaySpan.state;
+	   	  	console.log($scope.overlaySpan.state);	   	  	
+	   	  	if($scope.overlaySpan.state){
 	   	  		$scope.overlay = window.opener.addOverlay(coordenadas);
-	   	  		$scope.spanStyle = {'background-color': '#777'};
+	   	  		$scope.overlaySpan.spanStyle = {'background-color': '#777'};
 	   	  	}else{
 	   	  		window.opener.removeOverlay($scope.overlay);
-	   	  		$scope.spanStyle = {'background-color': '#eee'};	   	  		
+	   	  		$scope.overlaySpan.spanStyle = {'background-color': '#eee'};	   	  		
 	   	  	}
+	   	  	
+	   	  };
+	   	  
+	   	  $scope.showHideImagenes = function(acontecimiento){
+	   	  	$scope.modalSpan.state = !$scope.modalSpan.state;	   	  	
+	   	  	if($scope.modalSpan.state){
+				$scope.setAcontecimiento(acontecimiento);
+			  	$scope.mapScope.showImagenes();	 
+	   	  		$scope.modalSpan.spanStyle = {'background-color': '#777'};
+	   	  	}else{
+	   	  		console.log("hide opener modal");
+	   	  		$scope.setAcontecimiento(acontecimiento);
+			  	$scope.mapScope.hideImagenes();	   	  	
+	   	  		$scope.modalSpan.spanStyle = {'background-color': '#eee'};	   	  		
+	   	  	}		  	
+	   	  };
+	   	  
+	   	  $scope.showImagenes = function(acontecimiento){
+	   	  	$scope.setAcontecimiento(acontecimiento);
+		  	$scope.mapScope.showImagenes();	  			  	
 	   	  }
+	   	  
+	   	  $scope.fly = function(acontecimiento) {
+	   	  	var copyAcont = angular.copy(acontecimiento);
+	   	  	copyAcont.imagenes = [];
+		    $scope.setAcontecimiento(copyAcont);   	
+		    $scope.mapScope.hideImagenes();	   			    				  
+	        window.opener.doBounce(acontecimiento, true);
+	   	  };
+	   	  
+	   	  $scope.setAcontecimiento = function(acontecimiento){
+	   	  	$scope.acontecimiento = acontecimiento; 
+   			$scope.mapScope.acontecimiento = $scope.acontecimiento;
+   			$scope.mapScope.acontecimiento.fecha = acontecimiento.año+" "+acontecimiento.mes+" "+acontecimiento.dia;
+   			$scope.mapScope.$apply();
+	   	  }
+	   	  
+	   	  $scope.mapScope = window.opener.angular.element('#topNav').scope();
+	   	  
 		});
 		
 		app.filter('startFrom', function() {
@@ -105,12 +132,12 @@
 	      </div>
 	      
 	      <div ng-controller="toggle" class="input-group" ng-repeat="acont in linea.acontecimientos | startFrom:currentPage*pageSize | limitTo:pageSize">
-	      	<span class="input-group-addon glyphicon glyphicon-bookmark" ng-style="spanStyle" ng-click="addRemoveOverlay(acont.coordenadas);" style="cursor:pointer;"></span>
+	      	<span class="input-group-addon glyphicon glyphicon-bookmark" ng-style="overlaySpan.spanStyle" ng-click="addRemoveOverlay(acont.coordenadas);" style="cursor:pointer;"></span>
 	        <a href="#" class="list-group-item" ng-click="setAcontecimiento(acont)">
 	          <h4 class="list-group-item-text">{{acont.titulo}}</h4>
 	          <h5 class="list-group-item-text">{{acont.ano}}</h5>
 	        </a>
-	        <span class="input-group-addon glyphicon glyphicon-modal-window" onclick="console.log('hola')" style="cursor:pointer"></span>
+	        <span class="input-group-addon glyphicon glyphicon-modal-window" ng-style="modalSpan.spanStyle" ng-click="showHideImagenes(acont)" style="cursor:pointer"></span>
 	        <span class="input-group-addon glyphicon glyphicon-send" ng-click="fly(acont);"  style="cursor:pointer"></span>
 	      </div>
 	
@@ -160,6 +187,7 @@
       </div>      
     </div>
     
+    <!--  Mapa y datos de acontecimiento -->    
     <div class="col-md-4">
       <div id="map" class="map"></div>
     </div>
@@ -174,8 +202,14 @@
 	        </a>
 			</h2>	    	
           </div>    	
-    	<div>
+    	<div class="col-md-8">
     		<p>{{acontecimiento.contenido}}</p>
+    	</div>
+    	
+    	<div class="col-md-4">
+    		<a href="#" class="thumbnail"  ng-if="acontecimiento.imagenes[0]">
+    			<img alt="{{acontecimiento.imagenes[0].titulo}}" ng-src="/images/user/{{acontecimiento.imagenes[0].src}}">
+    		</a>
     	</div>
     </div>
     

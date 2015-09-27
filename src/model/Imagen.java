@@ -43,8 +43,6 @@ public class Imagen implements Serializable {
 		this.acontecimientoImagenes = acontecimientoImagenes;
 	}
 
-	public Imagen() {
-	}
 
 	public String getCopete() {
 		return this.copete;

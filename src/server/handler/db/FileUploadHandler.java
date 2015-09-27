@@ -1,5 +1,6 @@
 package server.handler.db;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,8 +37,6 @@ public class FileUploadHandler implements Handler<RoutingContext> {
       		acontecimiento.setContenido(formAttributes.get("titulo"));
       		acontecimiento.setCoordX(Double.parseDouble(formAttributes.get("coordenadaX")));
       		acontecimiento.setCoordY(Double.parseDouble(formAttributes.get("coordenadaY")));
-//            Globals.em.getTransaction().commit();
-//      		Globals.em.getTransaction().begin();
 
             for(int i = 0; i < imagenes.size(); i++){
             	imagenes.get(i).setTitulo(formAttributes.get("imgTitulo"+i));
@@ -46,7 +45,7 @@ public class FileUploadHandler implements Handler<RoutingContext> {
             	imagenes.get(i).getAcontecimientoImagenes().add(acontecimientoImagen);
             	Globals.em.merge(imagenes.get(i));
             }
-            
+            Globals.em.merge(acontecimiento);
             
             Globals.em.getTransaction().commit();
 		});
@@ -54,7 +53,7 @@ public class FileUploadHandler implements Handler<RoutingContext> {
         req.uploadHandler(new Handler<HttpServerFileUpload>() {
           @Override
           public void handle(final HttpServerFileUpload upload) {
-        	  System.out.println("uploadHandler");
+        	  System.out.print("uploadHandler  ");
               long max = imagenService.getMax();
 
               upload.exceptionHandler(new Handler<Throwable>() {
@@ -71,15 +70,19 @@ public class FileUploadHandler implements Handler<RoutingContext> {
 	            			System.out.println("isEnded");
 	            			req.response().end("Upload successful, you should see the file in the server directory");
 	            		}
-	            		
 	              }
               });
               Globals.em.getTransaction().begin();
               Imagen imagen = imagenService.create("last");
               imagenes.add(imagen);
-              Globals.em.getTransaction().commit();       
-              upload.streamToFileSystem(""+imagen.getId());
-
+              Globals.em.getTransaction().commit();
+              
+              String workingDir = System.getProperty("user.dir");
+              File file = new File(workingDir+File.separator+"webroot"+File.separator+"images"+File.separator+"user"+File.separator+imagen.getId());
+              System.out.println(file.getAbsolutePath());
+              
+              upload.streamToFileSystem(file.getPath());
+               
           }
         });
 		

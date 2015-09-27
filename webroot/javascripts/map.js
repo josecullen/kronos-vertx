@@ -1,7 +1,11 @@
 var osmLayer = new ol.layer.Tile({
 	source : new ol.source.OSM()
 });
-
+var stamenLayer = new ol.layer.Tile({
+    source: new ol.source.Stamen({
+      layer: 'watercolor'
+    })
+  });
 var birmingham = ol.proj.transform([ 2.08, 48.66 ], 'EPSG:4326', 'EPSG:3857');
 
 var view = new ol.View({
@@ -19,8 +23,16 @@ var newLayer = new ol.layer.Tile({
 	})
 });
 
+map.on('moveend', function(e){
+//	console.log(e);	
+//	console.log(view.getZoom());
+});
+
+
 map.addLayer(osmLayer);
-map.addLayer(newLayer);
+map.addLayer(stamenLayer);
+
+//map.addLayer(newLayer);
 
 function changeMapSrc(cb) {
 	console.log("changeMapSrc");
@@ -109,56 +121,7 @@ function setZoom(zoomIn){
     }        
 }	
 
-//var getUpdate = function(){
-//$.getJSON("/getUpdate", function(data){
-//console.log(data);
-//if(!data.sended){
-//  console.log(data.update);
-//  if(data.update.indexOf('fly') > -1){
-//    console.log(data.x+" "+data.y);
-//    var location = ol.proj.transform([parseFloat(data.x), parseFloat(data.y)], 'EPSG:4326', 'EPSG:3857');
-//    doBounce(location);
-//  }else if(data.update.indexOf('filter') > -1){
-   
-//    var overlays = map.getOverlays();
-//    console.log("overlays " +overlays.getLength());
-//    while(overlays.getLength() > 0){
-//      overlays.forEach(function(overl){
-//        console.log(overl);
-//        map.removeOverlay(overl);
-//      });    
-//      overlays = map.getOverlays();
-//    }
-   
-//    data.acont.forEach(function(item){
-//      var coord = [parseFloat(item.coordenadas[0]), parseFloat(item.coordenadas[1])];
-//      console.log(coord);
-//      var div = document.createElement("div");
-//      var img = document.createElement("img");
-//      img.src = "images/icon.png";
-//      div.appendChild(img);
-     
-//      var overlay = new ol.Overlay({
-//        element : div,
-//        positioning : 'bottom-center'
-//      });
-       
-//      var pos = ol.proj.transform(coord, 'EPSG:4326', 'EPSG:3857');
-//      overlay.setPosition(pos);
-//      map.addOverlay(overlay);
-//    });
-//  }else if(data.update.indexOf('zoom') > -1){
-//    var zoom = ol.animation.zoom({
-//      resolution: map.getView().getResolution()
-//    });
-//    map.beforeRender(zoom);
-//    view.setZoom(data.zoom);
-//  }
- 
-//}
-//});
-//setTimeout(getUpdate, 1000);
-//}
+
 function addOverlay(coord){
 	var div = document.createElement("div");
 	var img = document.createElement("img");

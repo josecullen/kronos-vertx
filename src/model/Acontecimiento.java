@@ -6,6 +6,9 @@ import javax.persistence.*;
 
 import java.util.List;
 
+import jdk.nashorn.internal.objects.annotations.Getter;
+import jdk.nashorn.internal.objects.annotations.Setter;
+
 
 /**
  * The persistent class for the ACONTECIMIENTO database table.
@@ -51,32 +54,25 @@ public class Acontecimiento implements Serializable {
 		this.id = id;
 	}
 
-	//bi-directional many-to-many association to Imagen
-//	@ManyToMany
-//	@JoinTable(
-//		name="ACONTECIMIENTO_IMAGEN"
-//		, joinColumns={
-//			@JoinColumn(name="ID_ACONTECIMIENTO", referencedColumnName="ID")
-//			}
-//		, inverseJoinColumns={
-//			@JoinColumn(name="ID_IMAGEN", referencedColumnName="ID")
-//			}
-//		)
-//	private List<Imagen> imagens;
-//	public List<Imagen> getImagens() {
-//		return this.imagens;
-//	}
-//
-//	public void setImagens(List<Imagen> imagens) {
-//		this.imagens = imagens;
-//	}
+	@OneToMany(mappedBy="acontecimiento") 
+	private List<AcontecimientoIcono> acontecimientoIconos;
 	
-
+	public List<AcontecimientoIcono> getAcontecimientoIconos() {
+		return acontecimientoIconos;
+	}
+		
+	public void setAcontecimientoIconos(List<AcontecimientoIcono> acontecimientoIconos) {
+		this.acontecimientoIconos = acontecimientoIconos;
+	}
+	
+	
 	@OneToMany(mappedBy="acontecimiento")
-	private List<AcontecimientoImagen> acontecimientoImagenes;		
+	private List<AcontecimientoImagen> acontecimientoImagenes;
+	
 	public List<AcontecimientoImagen> getAcontecimientoImagenes() {
 		return acontecimientoImagenes;
 	}
+		
 	public void setAcontecimientoImagenes(List<AcontecimientoImagen> acontecimientoImagenes) {
 		this.acontecimientoImagenes = acontecimientoImagenes;
 	}

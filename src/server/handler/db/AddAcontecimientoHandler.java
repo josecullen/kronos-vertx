@@ -39,25 +39,8 @@ public class AddAcontecimientoHandler implements Handler<RoutingContext> {
 				System.out.println(coordenadas);
 				System.out.println(coordenadas.getDouble("x"));
 				System.out.println(coordenadas.getDouble("y"));
-				JsonArray images = json.getJsonArray("images");
 
-//				routingContext.vertx().deployVerticle(new io.vertx.rxjava.core.AbstractVerticle(){
-//					public void start(){
-//						images.forEach(element ->{
-//							JsonObject image = new JsonObject(element.toString());
-//							byte[] data = image.getBinary("image");
-//							FileOutputStream fos;
-//							try {
-//								fos = new FileOutputStream("./pathname");
-//								fos.write(data);
-//								fos.close();
-//							} catch (Exception e) {
-//								e.printStackTrace();
-//							}						
-//						});
-//					}
-//
-//				});
+
 								
 								
 				String titulo = json.getString("titulo");
