@@ -1,0 +1,27 @@
+<div ng-controller="carouselCtrl">
+
+
+<div class="carousel-bg" ng-if="carousel"></div>
+<div class="carousel" ng-if="carousel">
+	<p>Hola Muchachos!</p>
+	<div class="img-container">
+		<div ng-repeat="slide in slides" class="imagen-if">
+			<img class="img" ng-src="{{slide.src }}" ng-if="count == $index">
+		</div>
+	</div>
+</div>
+
+<nav class="navbar navbar-inverse navbar-fixed-top carousel-top-nav" ng-if="carousel && navOnOff">
+	<div class="container" ng-repeat="slide in slides">
+		<h1 class="carousel" ng-if="count == $index">{{slide.titulo}}</h1>
+	</div>
+</nav>
+
+<nav class="navbar navbar-inverse navbar-fixed-bottom carousel-bottom-nav" ng-if="carousel && navOnOff">
+	<div class="container" ng-repeat="slide in slides">
+		<h3 class="carousel" ng-if="count == $index">{{slide.contenido}}</h3>
+	</div>
+</nav>
+
+
+</div>

@@ -1,0 +1,65 @@
+<html>
+<head>
+<meta charset="UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel='stylesheet' href='/bootstrap/dist/css/bootstrap.css'>
+<link rel="stylesheet" type="text/css" href="/bootstrap/dist/css/bootstrap-theme.css">
+<link rel="stylesheet" href="/css/ol.css" type="text/css">
+
+<script type="text/javascript" src="/js/jquery-ui-1.10.4.custom/js/jquery-1.10.2.js"></script>
+<script type="text/javascript" src="/js/jquery-ui-1.11.4.custom/jquery-ui.min.js"></script>
+<script type="text/javascript" src="/js/angular.js"></script>
+<script type="text/javascript" src="/bootstrap/dist/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/ol.js"></script>
+
+<style type="text/css">
+.input-group-addon {
+	min-width: 150px;
+}
+
+.span-lt {
+	min-width: 50px;
+}
+</style>
+<script type="text/javascript" src="/angular/js/app.js"></script>
+<script type="text/javascript" src="/angular/js/controllers-common.js"></script>
+<script type="text/javascript" src="/angular/js/directives-common.js"></script>
+
+<script type="text/javascript" src="angular/js/directive-map.js"></script>
+<script type="text/javascript" src="angular/js/services-map.js"></script>
+<script type="text/javascript" src="angular/js/services-control-map.js"></script>
+<script type="text/javascript" src="angular/js/controller-map.js"></script>
+
+</head>
+
+<body ng-app="app" ng-controller="appCtrl">
+
+	<div class="col-xs-6">
+		<jc-input name="titulo" type="'text'" title="'Título'" value="acontecimiento.title"></jc-input>
+		<jc-input name="fecha" type="'date'" title="'Fecha'" value="acontecimiento.date"></jc-input>
+		<jc-coordinates name="names" title="'Coordenadas'" value="acontecimiento.coordinate"></jc-coordinates>
+		<jc-input name="contenido" type="'textarea'" title="'Contenido'" value="acontecimiento.contenido"></jc-input>
+		<div ng-repeat="image in acontecimiento.images">
+			<jc-file-image type="'image'" data="image">
+			<button class="btn btn-primary glyphicon glyphicon-plus " ng-if="$last" ng-click="newImage();"></button>
+			<button class="btn btn-danger glyphicon glyphicon-minus " ng-show="acontecimiento.images.length > 1 " ng-click="removeImage($index)"></button>
+			</jc-file-image>
+		</div>
+		<jc-file-image type="'icon'" data="acontecimiento.icon">
+	</div>
+
+	<div class="col-xs-6">
+		<jc-map></jc-map>
+		<jc-clone-map></jc-clone-map>
+		<textarea style="width: 100%">{{showAcont}}</textarea>
+	</div>
+	<button ng-click="doZoom(3)">Zoom</button>
+	<button ng-click="flyTo([-60,-30, 10])">Fly To</button>
+	<button ng-click="addOverlay()">addOverlay</button>
+
+	<button ng-click="log()">Log</button>
+</body>
+
+
+</html>

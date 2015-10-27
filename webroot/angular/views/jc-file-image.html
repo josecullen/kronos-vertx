@@ -1,0 +1,41 @@
+<style>
+.btn-file input[type=file] {
+	position: absolute;
+	top: 0;
+	right: 0;
+	min-width: 100%;
+	min-height: 100%;
+	font-size: 100px;
+	text-align: right;
+	filter: alpha(opacity = 0);
+	opacity: 0;
+	outline: none;
+	background: white;
+	cursor: inherit;
+	display: block;
+}
+</style>
+<div ng-controller="imgController" class="row jumbotron" style="width: 100%">
+	<div class=container>
+		<div class="col-xs-3">
+			<a href="#" class="thumbnail" ng-show="data.imgSrc"> 
+				<img class="form-control" ng-src="{{data.imgSrc}}">
+			</a>		
+		</div>	
+		<div class="col-xs-9" >
+			<div ng-if="type == 'image'">
+				<jc-input name="titulo" type="'text'" title="'T&iacute; tulo'" value="data.title"></jc-input>
+				<jc-input name="contenido" type="'textarea'" title="'Contenido'" value="data.content"></jc-input>
+			</div>
+			<div style="width: 100%">
+				<span class="btn btn-default btn-file col-xs-6" >
+					Cargar Imagen <input type="file" ng-model="data.image" onchange="angular.element(this).scope().fileNameChanged(this, angular.element(this))">				
+				</span>		
+				<div class="col-xs-6" ng-transclude></div>
+			</div>		
+		</div>
+	</div>
+</div>
+
+
+

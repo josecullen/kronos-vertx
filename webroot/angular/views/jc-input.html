@@ -1,0 +1,5 @@
+<div class="input-group" style="width: 100%">
+	<span class="input-group-addon">{{title}}</span>	
+	<input ng-hide="type == 'textarea'" type="{{type}}" name="{{name}}" ng-model="value" class="form-control">
+	<textarea ng-show="type == 'textarea'" ng-model="value" class="form-control" name="{{name}}" rows="2"></textarea>
+</div>

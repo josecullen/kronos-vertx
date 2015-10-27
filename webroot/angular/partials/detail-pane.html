@@ -1,0 +1,159 @@
+<!-- <div class="jumbotron" style="height: 90%" ng-if="acontecimiento"> -->
+<!-- 	<div class="col-xs-3"> -->
+<!-- 		<a href="#" class="thumbnail"> <img class="form-control" ng-src="images/user/{{acontecimiento.imagenes[0].src}}"> -->
+<!-- 		</a> -->
+<!-- 	</div> -->
+<!-- 	<div class="col-xs-9"> -->
+<!-- 		<h1>{{acontecimiento.titulo}}</h1> -->
+<!-- 	</div> -->
+<!-- 	<p>{{ acontecimiento.contenido }}</p> -->
+<!-- </div> -->
+<style>
+.wrapper {
+	position: relative;
+	margin: 0 auto;
+	overflow: auto;
+	padding: 5px;
+	height: 500px;
+}
+
+.list {
+	position: absolute;
+	left: 0px;
+	top: 0px;
+ 	min-width: 3000px; 
+	margin-left: 12px;
+	margin-top: 0px;
+}
+
+.list li {
+	display: table-cell;
+	position: relative;
+	text-align: center;
+	cursor: grab;
+	cursor: -webkit-grab;
+	color: #efefef;
+	vertical-align: middle;
+}
+
+.scroller {
+	text-align: center;
+	cursor: pointer;
+	display: none;
+	padding: 7px;
+	padding-top: 11px;
+	white-space: no-wrap;
+	vertical-align: middle;
+	background-color: #fff;
+}
+
+.scroller-right {
+	float: right;
+}
+
+.scroller-left {
+	float: left;
+}
+</style>
+<script>
+// 	var hidWidth;
+// 	var scrollBarWidths = 40;
+
+// 	var widthOfList = function() {
+// 		var itemsWidth = 0;
+// 		$('.list li').each(function() {
+// 			var itemWidth = $(this).outerWidth();
+// 			itemsWidth += itemWidth;
+// 		});
+// 		return itemsWidth;
+// 	};
+
+// 	var widthOfHidden = function() {
+// 		return (($('.wrapper').outerWidth()) - widthOfList() - getLeftPosi())
+// 				- scrollBarWidths;
+// 	};
+
+// 	var getLeftPosi = function() {
+// 		return $('.list').position().left;
+// 	};
+
+// 	var reAdjust = function() {
+// 		if (($('.wrapper').outerWidth()) < widthOfList()) {
+// 			$('.scroller-right').show();
+// 		} else {
+// 			$('.scroller-right').hide();
+// 		}
+
+// 		if (getLeftPosi() < 0) {
+// 			$('.scroller-left').show();
+// 		} else {
+// 			$('.item').animate({
+// 				left : "-=" + getLeftPosi() + "px"
+// 			}, 'slow');
+// 			$('.scroller-left').hide();
+// 		}
+// 	}
+
+// 	reAdjust();
+
+// 	$(window).on('resize', function(e) {
+// 		reAdjust();
+// 	});
+
+// 	$('.scroller-right').click(function() {
+
+// 		$('.scroller-left').fadeIn('slow');
+// 		$('.scroller-right').fadeOut('slow');
+
+// 		$('.list').animate({
+// 			left : "+=" + widthOfHidden() + "px"
+// 		}, 'slow', function() {
+
+// 		});
+// 	});
+
+// 	$('.scroller-left').click(function() {
+
+// 		$('.scroller-right').fadeIn('slow');
+// 		$('.scroller-left').fadeOut('slow');
+
+// 		$('.list').animate({
+// 			left : "-=" + getLeftPosi() + "px"
+// 		}, 'slow', function() {
+
+// 		});
+// 	});
+</script>
+
+
+<div class="bs-example" data-example-id="thumbnails-with-custom-content" >
+	<div class="col-xs-12">
+		<h1>{{acontecimiento.titulo}}</h1>
+		<p>{{ acontecimiento.contenido }}</p>
+	</div>
+
+	<div class="wrapper">
+		<ul class="nav nav-tabs list" id="myTab" ng-style="{'min-width': acontecimiento.imagenes.length*250}">		
+			<li ng-repeat="imagen in acontecimiento.imagenes track by $index">
+				<div class="col-sm-6 col-md-4" style="width: 250px">
+					<div class="thumbnail">
+						<img style="height: 200px; width: 100%; display: block;" ng-src="{{imagen.src}}">
+						<div class="caption">
+							<h3>{{imagen.titulo}}</h3>
+							<p>{{imagen.contenido}}</p>
+							<p>
+								<a href="#" class="btn btn-primary col-xs-12" role="button" ng-click="showImagen(acontecimiento, imagen)">Mostrar</a> 
+							</p>
+						</div>
+					</div>
+				</div>
+			</li>
+		</ul>
+	</div>
+	<div class="btn-group btn-group-lg navbar-right" role="group" style="padding: 11px">
+		<button ng-click="showImagenes(acontecimiento)" class="btn btn-sq glyphicon glyphicon-modal-window"></button>
+		<button ng-click="prevSlide()" class="btn btn-sq glyphicon glyphicon-arrow-left"></button>
+		<button ng-click="nextSlide()" class="btn btn-sq-lg glyphicon glyphicon-arrow-right"></button>
+	</div>
+	
+</div>
