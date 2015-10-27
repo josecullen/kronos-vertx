@@ -7,7 +7,7 @@
 <script type="text/javascript" src="/javascripts/jquery-ui-1.11.4.custom/jquery-ui.min.js"></script>
 <script type="text/javascript" src="/javascripts/ol.js"></script>
 <script type="text/javascript" src="/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="/javascripts/angular.min.js"></script>    
+<script type="text/javascript" src="/javascripts/angular.min.js"></script>
 
 <link rel='stylesheet' href='/stylesheets/style.css'>
 <link rel="stylesheet" href="/stylesheets/ol.css" type="text/css">
@@ -16,371 +16,426 @@
 <style type="text/css">
 /* Styles go here */
 .carousel {
-    margin-top: 10px;
+	margin-top: 10px;
 }
+
 .item .thumb {
 	width: 5%;
 	cursor: pointer;
 	float: left;
 }
+
 .item .thumb img {
 	/*width: 100%;*/
 	margin: 2px;
 }
 
-
-
-
 .btn-file {
-  position: relative;
-  overflow: hidden;
+	position: relative;
+	overflow: hidden;
 }
 
 .btn-file input[type=file] {
-  position: absolute;
-  top: 0;
-  right: 0;
-  min-width: 100%;
-  min-height: 100%;
-  font-size: 100px;
-  text-align: right;
-  filter: alpha(opacity=0);
-  opacity: 0;
-  outline: none;
-  background: white;
-  cursor: inherit;
-  display: block;
+	position: absolute;
+	top: 0;
+	right: 0;
+	min-width: 100%;
+	min-height: 100%;
+	font-size: 100px;
+	text-align: right;
+	filter: alpha(opacity = 0);
+	opacity: 0;
+	outline: none;
+	background: white;
+	cursor: inherit;
+	display: block;
 }
 
-.hideIcon{
+.hideIcon {
 	width: 0;
 	height: 0;
-	visibility: collapse;	
+	visibility: collapse;
 }
-
 </style>
 <title>Insert title here</title>
 </head>
-<body ng-app='app' ng-controller="imgController" >
-<div>
-	<ul class="nav nav-tabs" role="tablist">
-    	<li role="presentation" class="active">
-        	<a id="homa" href="#home" aria-controls="home" role="tab" data-toggle="tab">Acontecimiento</a>
-      	</li>
-      	<li role="presentation">
-        	<a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Línea de Tiempo</a>
-      	</li>
-    </ul>
-    <div class="tab-content">
-    	<div role="tabpanel" class="tab-pane active" id="home">	
-			<div class=" col-xl-6 col-lg-6 col-xs-12 col-md-6">
-			
-			
-			
-			<form action="/file"  ENCTYPE="multipart/form-data" method="POST" class="navbar-form navbar-left">		
-				
-				<div class="input-group" style="width: 100%">
-					<span class="input-group-addon" id="basic-addon1">Título</span> 
-					<input type="text" name="titulo" ng-model="acontecimiento.titulo" class="form-control" placeholder="Batalla de San Lorenzo" aria-describedby="basic-addon1">
-				</div>
-				
-				<div class="input-group" style="width: 100%">
-					<span class="input-group-addon" id="basic-addon1">Fecha</span> 
-					<input type="date" name="fecha" ng-model="acontecimiento.date" class="form-control" aria-describedby="basic-addon1">
-				</div>
-				
-				<div class="input-group" style="width: 100%">
-					<span class="input-group-addon" id="basic-addon1">Coordenadas</span>
-					<input type="number" id="x" ng-model="acontecimiento.coordenadas.x" name="coordenadaX" step="0.01"	class="form-control" placeholder="37,35" aria-describedby="basic-addon1"> 
-					<span class="input-group-addon" id="basic-addon1">x</span> 
-					<input type="number" id="y" ng-model="acontecimiento.coordenadas.y" name="coordenadaY" step="0.01" class="form-control" placeholder="15,48" aria-describedby="basic-addon1"> 
-					<span class="input-group-addon" id="basic-addon1">y</span>
+<body ng-app='app' ng-controller="imgController">
+	<div>
+		<ul class="nav nav-tabs" role="tablist">
+			<li role="presentation" class="active"><a id="homa" href="#home" aria-controls="home" role="tab" data-toggle="tab">Acontecimiento</a></li>
+			<li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Línea de Tiempo</a></li>
+			<li role="presentation"><a ng-click="cargarAcontecimiento()" data-toggle="modal" data-target="#myModal">Cargar Acontecimiento</a></li>
+		</ul>
+		
+		
+		<div class="tab-content">
+			<div role="tabpanel" class="tab-pane active" id="home">
+				<div class=" col-xl-6 col-lg-6 col-xs-12 col-md-6" style="overflow: scroll; height: 800px;">
+
+					<form action="/file" ENCTYPE="multipart/form-data" method="POST" class="navbar-form navbar-left">
+
+						<div class="input-group" style="width: 100%">
+							<span class="input-group-addon" id="basic-addon1">Título</span>
+							<input type="text" name="titulo" ng-model="acontecimiento.titulo" class="form-control" placeholder="Batalla de San Lorenzo">
+						</div>
+
+						<div class="input-group" style="width: 100%">
+							<span class="input-group-addon" id="basic-addon1">Fecha</span>
+							<input type="date" name="fecha" ng-model="acontecimiento.date" class="form-control">
+						</div>
+
+						<div class="input-group" style="width: 100%">
+							<span class="input-group-addon" id="basic-addon1">Coordenadas</span>
+							<input type="number" id="x" ng-model="acontecimiento.coordenadas.x" name="coordenadaX" step="0.01" class="form-control" placeholder="37,35">
+							<span class="input-group-addon" id="basic-addon1">x</span>
+							<input type="number" id="y" ng-model="acontecimiento.coordenadas.y" name="coordenadaY" step="0.01" class="form-control" placeholder="15,48">
+							<span class="input-group-addon" id="basic-addon1">y</span>
+						</div>
+
+						<div class="input-group" style="width: 100%">
+							<span class="input-group-addon" id="basic-addon1">Contenido</span>
+							<textarea ng-model="acontecimiento.contenido" class="form-control" name="contenido" rows="2"></textarea>
+						</div>
+
+						<!-- Imagenes -->
+						<div class="row jumbotron" ng-repeat="image in acontecimiento.images">
+							<div class="col-xl-3 col-lg-3 col-xs-3 col-md-3">
+								<a href="#" class="thumbnail" ng-if="image.imgSrc"> <img id="blah" class="form-control" ng-src="{{image.imgSrc}}">
+								</a>
+								<span class="btn btn-default btn-file">
+									Cargar Imagen <input type="file" id="{{$index}}" name="img{{$index}}"
+										onchange="angular.element(this).scope().fileNameChanged(this, angular.element(this), 'image')"
+									>
+								</span>
+							</div>
+
+							<div class="col col-xl-8 col-lg-8 col-xs-8 col-md-8">
+								<div class="input-group" style="width: 100%">
+									<span class="input-group-addon" id="basic-addon1">Título Imagen</span>
+									<input type="text" name="imgTitulo{{$index}}" ng-model="image.title" class="form-control">
+								</div>
+								<textarea class="form-control" rows="2" name="imgContenido{{$index}}" style="width: 100%" ng-model="image.content" placeholder="Contenido"></textarea>
+							</div>
+
+							<button ng-if="$last" ng-click="newImage();" class="btn btn-primary glyphicon glyphicon-plus col-sm-1 col-xl-1 col-lg-1"></button>
+							<button ng-if="!$last" ng-click="removeImage($index);" class="btn btn-danger glyphicon glyphicon-minus col-sm-1 col-xl-1 col-lg-1"></button>
+						</div>
+						<!-- Imagenes -->
+
+						<!-- Íconos -->
+						<div>
+							<div class="thumb" style="display: inline-block" ng-repeat="icon in acontecimiento.iconos" ng-if="icon.imgSrc">
+								<a href="#" class="thumbnail" style="max-width: 50px"> <img src="{{icon.imgSrc}}" ng-click="setIcono(icon)">
+								</a>
+							</div>
+							<div class="row jumbotron" ng-repeat="icon in acontecimiento.iconos">
+								<div class="col-xs-2">
+									<a href="#" class="thumbnail" ng-if="icon.imgSrc"> <img class="form-control" ng-src="{{icon.imgSrc}}">
+									</a>
+								</div>
+								<div class="col-xs-10">
+									<div>
+										<div ng-if="icon.imgSrc">
+											<div class="input-group" style="width: 100%">
+												<span class="input-group-addon">Título Ícono</span>
+												<input type="text" ng-model="icon.title" class="form-control" name="iconTitulo{{$index}}" style="width: 100%">
+											</div>
+
+											<div class="input-group" style="width: 100%">
+												<span class="input-group-addon">Coordenadas</span>
+												<input type="number" id="iconX{{$index}}" ng-model="icon.coordenada.x" name="iconX{{$index}}" step="0.01" class="form-control">
+												<span class="input-group-addon">x</span>
+												<input type="number" id="iconY{{$index}}" ng-model="icon.coordenada.y" name="iconY{{$index}}" step="0.01" class="form-control">
+												<span class="input-group-addon">y</span>
+
+												<div class="btn-group col-xs-1" data-toggle="buttons" style="width: 100%; height: 100%">
+													<label class="btn btn-primary active" ng-click="toggleCoord($index)"> <span class="glyphicon glyphicon-asterisk"></span>
+													</label>
+												</div>
+											</div>
+										</div>
+										<button class="btn btn-primary glyphicon glyphicon-plus pull-right" ng-if="$last" ng-click="newIcon();"></button>
+										<button class="btn btn-danger glyphicon glyphicon-minus pull-right" ng-show="acontecimiento.iconos.length > 1 || !$first" ng-click="removeIcon($index)"></button>
+
+									</div>
+									<span class="btn btn-default btn-file pull-right">
+										Cargar Ícono<input type="file" id="{{$index}}" name="icon{{$index}}"
+											onchange="angular.element(this).scope().fileNameChanged(this, angular.element(this), 'icon')"
+										>
+									</span>
+								</div>
+							</div>
+						</div>
+						<!-- Íconos -->
+
+						<button type="button" ng-click="showAllIcons = !showAllIcons" class="btn btn-default">showAll</button>
+						<button type="button" ng-click="log()" class="btn btn-default">log</button>
+						<button type="button" ng-click="visualizeOverlays()" class="btn btn-default">refresh</button>
+						<button type="submit" class="btn btn-default">Submit</button>
+					</form>
 				</div>
 
-				<div class="input-group" style="width: 100%">
-					<span class="input-group-addon" id="basic-addon1">Contenido</span>
-						<textarea ng-model="acontecimiento.contenido" class="form-control" name="contenido" rows="2" aria-describedby="basic-addon1"></textarea>
+
+				<!-- Mapa e Íconos -->
+				<div class="col-xl-6 col-lg-6 col-xs-12 col-md-6">
+					<div id="map" class="map" style="height: 50%; width: 100%;"></div>
+					<div id="overlay" style="background-color: white; border-radius: 10px; border: 1px solid black; padding: 5px 10px;"></div>
+				</div>
+				<!-- Mapa e Íconos -->
+
+
+			</div>
+
+
+			<!-- TAB LÍNEAS -->
+			<div role="tabpanel" class="tab-pane" id="profile">
+				<div class="col-md-5">
+					<div class="input-group-btn">
+						<input id="nombre-linea" name="nombreLinea" type="TextBox" ID="datebox" Class="form-control">
+						<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
+							<span class="caret"></span>
+						</button>
+						<button type="button" class="btn btn-primary">
+							<span class="">Nuevo</span>
+						</button>
+						<ul id="listLineasDeTiempo" class="dropdown-menu"></ul>
 					</div>
-				
-				<!-- Imagenes -->
-		        <div class="row jumbotron" ng-repeat="image in acontecimiento.images">
-				    <div class="col-xl-3 col-lg-3 col-xs-3 col-md-3">
-				      <a href="#" class="thumbnail"  ng-if="image.imgSrc">
-				        <img id="blah" class="form-control" ng-src="{{image.imgSrc}}"  >
-				      </a>
-				      <span class="btn btn-default btn-file">
-				      Cargar Imagen <input type="file"  id="{{$index}}" name="img{{$index}}" onchange="angular.element(this).scope().fileNameChanged(this, angular.element(this), 'image')">
-				      </span>
-				    </div>    
-					
-				    <div class="col col-xl-8 col-lg-8 col-xs-8 col-md-8">
-				      	<div class="input-group" style="width: 100%">
-							<span class="input-group-addon" id="basic-addon1">Título Imagen</span> 
-							<input type="text" name="imgTitulo{{$index}}" ng-model="image.title" class="form-control" aria-describedby="basic-addon1">
-						</div>
-					    <textarea class="form-control" rows="2" name="imgContenido{{$index}}" style="width: 100%" ng-model="image.content" placeholder="Contenido"></textarea>
-				    </div>
-				    
-				    <button ng-if="$last" ng-click="newImage();" class="btn btn-primary glyphicon glyphicon-plus col-sm-1 col-xl-1 col-lg-1"></button>
-				    <button ng-if="!$last" ng-click="removeImage($index);" class="btn btn-danger glyphicon glyphicon-minus col-sm-1 col-xl-1 col-lg-1"></button>
+					<div id="sortable1" class="list-group connectedSortable">
+						<a href="#" class="list-group-item active">
+							<h4 class="list-group-item-heading">Línea de Tiempo</h4>
+						</a>
+					</div>
 				</div>
-				<!-- Imagenes -->	
-				
-				<!-- Íconos -->	
-				<div>
-		        <div class="thumb" style="display: inline-block" ng-repeat="icon in acontecimiento.iconos" ng-if="icon.imgSrc">
-			    	<a href="#" class="thumbnail" style="max-width: 50px">
-						<img src="{{icon.imgSrc}}" ng-click="setIcono(icon)">
-					</a>			                    	
-			    </div>    
-			    <div class="row jumbotron" ng-repeat="icon in acontecimiento.iconos" >
-					<div class="col-xs-2">
-				    	<a href="#" class="thumbnail"  ng-if="icon.imgSrc">
-							<img class="form-control" ng-src="{{icon.imgSrc}}">
-						</a>						       		    
-			   	 	</div>
-			   	 	<div class="col-xs-10" >
-			   	 		<div  >
-			   	 			<div ng-if="icon.imgSrc">
-				   	 		<div class="input-group" style="width: 100%">
-								<span class="input-group-addon" >Título Ícono</span> 
-								<input type="text"  ng-model="icon.title" class="form-control" name="iconTitulo{{$index}}" style="width: 100%" >
-							</div>
-							
-							<div class="input-group" style="width: 100%">
-								<span class="input-group-addon" >Coordenadas</span>
-								<input type="number" id="iconX{{$index}}" ng-model="icon.coordenada.x" name="iconX{{$index}}" step="0.01"	class="form-control" > 
-								<span class="input-group-addon" >x</span> 
-								
-								<input type="number" id="iconY{{$index}}" ng-model="icon.coordenada.y" name="iconY{{$index}}" step="0.01" class="form-control" > 
-								<span class="input-group-addon" >y</span>
-															
-								<div class="btn-group col-xs-1" data-toggle="buttons" style="width: 100%; height: 100%">
-								  	<label class="btn btn-primary active" ng-click="toggleCoord($index)">
-								    	<span class="glyphicon glyphicon-asterisk"></span>
-								  	</label>
-								</div>														
-							</div>
-						</div>
-							<button class="btn btn-primary glyphicon glyphicon-plus pull-right" ng-if="$last" ng-click="newIcon();"></button>
-							<button class="btn btn-danger glyphicon glyphicon-minus pull-right" ng-show="acontecimiento.iconos.length > 1 || !$first" ng-click="removeIcon($index)"></button>							
-							
-						</div>
-						<span class="btn btn-default btn-file pull-right">
-							Cargar Ícono<input type="file" id="{{$index}}" name="icon{{$index}}" onchange="angular.element(this).scope().fileNameChanged(this, angular.element(this), 'icon')">
-						</span>	
-			   	 	</div>
-				</div>  
+				<div id="sortable2" class="list-group col-md-4 connectedSortable">
+					<a href="#" class="list-group-item active">
+						<h4 class="list-group-item-heading">Acontecimientos</h4>
+					</a>
 				</div>
-				<!-- Íconos -->	
-				
-				<button type="button" ng-click="showAllIcons = !showAllIcons" class="btn btn-default">showAll</button>
-				<button type="button" ng-click="log()" class="btn btn-default">log</button>	
-				<button type="submit" class="btn btn-default">Submit</button>
-			</form>
+				<button onclick="guardarLinea();">Guardar</button>
 			</div>
-			
-			
-			<!-- Mapa e Íconos -->
-			<div class="col-xl-6 col-lg-6 col-xs-12 col-md-6">
-				<div id="map" class="map" style="height: 50%; width: 100%;"></div>		
-				<div id="overlay" style="background-color: white; border-radius: 10px; border: 1px solid black; padding: 5px 10px;"></div>				
-			</div>
-			<!-- Mapa e Íconos -->
-			
-			
-		</div>
-		
-		
-		<!-- TAB -->
-		<div role="tabpanel" class="tab-pane" id="profile">
-			<div class="col-md-5">
-				<div class="input-group-btn">
-					<input id="nombre-linea" name="nombreLinea" type="TextBox" ID="datebox" Class="form-control">
-					<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
-						<span class="caret"></span>
-					</button>
-					<button type="button" class="btn btn-primary">
-						<span class="">Nuevo</span>
-					</button>
-					<ul id="listLineasDeTiempo" class="dropdown-menu"></ul>
-			    </div>
-		        <div id="sortable1" class="list-group connectedSortable">	
-		        	<a href="#" class="list-group-item active">
-		          		<h4 class="list-group-item-heading">Línea de Tiempo</h4>
-	          		</a>		          	
-		        </div>
-	        </div>
-	        <div id="sortable2" class="list-group col-md-4 connectedSortable">	
-	          	<a href="#" class="list-group-item active">
-	          		<h4 class="list-group-item-heading">Acontecimientos</h4>
-	          	</a>
-	        </div>
-	        <button onclick="guardarLinea();">Guardar</button>
-      	</div>
-		<!-- TAB -->		
-		
-		<!-- Footer Íconos 	 -->
-<!-- 		<nav class="navbar navbar-inverse navbar-fixed-bottom"> -->
-<!-- 			<div class="clearfix"> -->
-<!-- 		    	<div id="thumbcarousel" class="carousel slide" data-interval="false"> -->
-<!-- 		            <div class="carousel-inner"> -->
-<!-- 		                <div class="item active"> -->
-<!-- 		                    <div data-target="#carousel" data-slide-to="0" class="thumb"><img src="http://placehold.it/30/e8117f/fff&amp;text=Product+Main"></div>                     -->
-<!-- 		                </div> -->
-<!-- 		                <div class="item"> -->
-<!-- 		                    <div data-target="#carousel" data-slide-to="8" class="thumb"><img src="http://placehold.it/30/612b65/fff&amp;text=Product+Image+5"></div>                    -->
-<!-- 		                </div>/item -->
-<!-- 		            </div>/carousel-inner -->
-<!-- 		            <a class="left carousel-control" href="#thumbcarousel" role="button" data-slide="prev"> -->
-<!-- 		                <span class="glyphicon glyphicon-chevron-left"></span> -->
-<!-- 		            </a> -->
-<!-- 		            <a class="right carousel-control" href="#thumbcarousel" role="button" data-slide="next"> -->
-<!-- 		                <span class="glyphicon glyphicon-chevron-right"></span> -->
-<!-- 		            </a> -->
-<!-- 		        </div> /thumbcarousel -->
-<!-- 		    </div>/clearfix -->
-<!-- 	  	</nav> -->
-      	<!-- Footer Íconos 	 --> 
-      	
-	</div>
-</div>
+			<!-- TAB LÍNEAS -->
 
+			<!-- Footer Íconos 	 -->
+			<!-- 		<nav class="navbar navbar-inverse navbar-fixed-bottom"> -->
+			<!-- 			<div class="clearfix"> -->
+			<!-- 		    	<div id="thumbcarousel" class="carousel slide" data-interval="false"> -->
+			<!-- 		            <div class="carousel-inner"> -->
+			<!-- 		                <div class="item active"> -->
+			<!-- 		                    <div data-target="#carousel" data-slide-to="0" class="thumb"><img src="http://placehold.it/30/e8117f/fff&amp;text=Product+Main"></div>                     -->
+			<!-- 		                </div> -->
+			<!-- 		                <div class="item"> -->
+			<!-- 		                    <div data-target="#carousel" data-slide-to="8" class="thumb"><img src="http://placehold.it/30/612b65/fff&amp;text=Product+Image+5"></div>                    -->
+			<!-- 		                </div>/item -->
+			<!-- 		            </div>/carousel-inner -->
+			<!-- 		            <a class="left carousel-control" href="#thumbcarousel" role="button" data-slide="prev"> -->
+			<!-- 		                <span class="glyphicon glyphicon-chevron-left"></span> -->
+			<!-- 		            </a> -->
+			<!-- 		            <a class="right carousel-control" href="#thumbcarousel" role="button" data-slide="next"> -->
+			<!-- 		                <span class="glyphicon glyphicon-chevron-right"></span> -->
+			<!-- 		            </a> -->
+			<!-- 		        </div> /thumbcarousel -->
+			<!-- 		    </div>/clearfix -->
+			<!-- 	  	</nav> -->
+			<!-- Footer Íconos 	 -->
+
+		</div>
+	</div>
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>	
 
 </body>
 
 <script type="text/javascript">
-	
-var app = angular.module('app', []);
+	var app = angular.module('app', []);
 
+	app
+			.controller(
+					'imgController',
+					function($scope, $http, $window) {
+						$scope.acontecimiento = {
+							coordenadas : {
+								x : '',
+								y : ''
+							}
+						};
+						$scope.acontecimiento.images = [ {
+							imgSrc : '',
+							content : '',
+							title : ''
+						} ];
+						$scope.log = function() {
+							console.log($scope.acontecimiento);
+							return true;
+						};
+						$scope.showAllIcons = false;
+						$scope.acontecimiento.iconos = [ {
+							imgSrc : '',
+							title : '',
+							coordenada : {
+								x : '',
+								y : ''
+							}
+						} ];
 
-app.controller('imgController',function($scope, $http, $window){
-	$scope.acontecimiento = {coordenadas: {x: '', y: ''}};	
-	$scope.acontecimiento.images = [{ imgSrc: '',  content: '',  title: ''}];		
-	$scope.log = function(){console.log($scope.acontecimiento); return true;};
-	$scope.showAllIcons = false;	
-	$scope.acontecimiento.iconos = [{imgSrc: '', title: '', coordenada: {x : '', y : ''} }];	
-	
-	$scope.submit = function(){
-		$scope.showAllIcons = true;
-		return false;
-	}
-	
-	$scope.fileNameChanged = function(input, index, iconOrImage){
-	    if (input.files && input.files[0]) {
-	      var reader = new FileReader();
-	      reader.onload = function(e) {
-	      	if(iconOrImage == 'image'){ // Seteo el target a partir del número de índice del elemento en la lista
-	      	   $scope.acontecimiento.images[index[0].id].imgSrc = e.target.result;
-	      	}else{
-	      		$scope.acontecimiento.iconos[index[0].id].imgSrc = e.target.result;	      	
-	      	}      	
-	        $scope.$apply();
-	      }
-	      reader.readAsDataURL(input.files[0]);
-	    }
-	};
-	
-	$scope.newImage = function() {
-	    $scope.acontecimiento.images.push({
-	      newImage: '',
-	      content: '',
-	      title: ''
-		});
-	};	
-	
-	$scope.newIcon = function() {
-	    $scope.acontecimiento.iconos.push({ imgSrc: '', title: '', coordenada: {x : '', y : ''} });
-	};
-	
-	$scope.removeImage = function(index) {
-		$scope.acontecimiento.images.splice(index, 1);
-	};
-	
-	$scope.removeIcon = function(index) {
-		$scope.acontecimiento.iconos.splice(index, 1);
-	};
-	
-	$scope.toggleCoord = function(index){
-		console.log(index);
-		iconTarget = { x: 'iconX'+index, y : 'iconY'+index };
-		console.log($window.actualCoord );
-		
-		if($window.actualCoord == 'acontecimiento' || $window.actualCoord.x != iconTarget.x){
-			$window.actualCoord = iconTarget;		
-		}else{
-			$window.actualCoord = 'acontecimiento';		
-		}
-		console.log($window.actualCoord);
-	};
+						$scope.submit = function() {
+							$scope.showAllIcons = true;
+							return false;
+						};
 
-});
+						$scope.fileNameChanged = function(input, index,
+								iconOrImage) {
+							if (input.files && input.files[0]) {
+								var reader = new FileReader();
+								reader.onload = function(e) {
+									if (iconOrImage == 'image') { // Seteo el target a partir del número de índice del elemento en la lista
+										$scope.acontecimiento.images[index[0].id].imgSrc = e.target.result;
+									} else {
+										$scope.acontecimiento.iconos[index[0].id].imgSrc = e.target.result;
+									}
+									$scope.$apply();
+								}
+								reader.readAsDataURL(input.files[0]);
+							}
+						};
 
+						$scope.newImage = function() {
+							$scope.acontecimiento.images.push({
+								newImage : '',
+								content : '',
+								title : ''
+							});
+						};
 
-	
-	
-	
+						$scope.newIcon = function() {
+							$scope.acontecimiento.iconos.push({
+								imgSrc : '',
+								title : '',
+								coordenada : {
+									x : '',
+									y : ''
+								}
+							});
+						};
+
+						$scope.removeImage = function(index) {
+							$scope.acontecimiento.images.splice(index, 1);
+						};
+
+						$scope.removeIcon = function(index) {
+							$scope.acontecimiento.iconos.splice(index, 1);
+						};
+
+						$scope.toggleCoord = function(index) {
+							console.log(index);
+							iconTarget = {
+								x : 'iconX' + index,
+								y : 'iconY' + index,
+								imgSrc : $scope.acontecimiento.iconos[index].imgSrc,
+								icons : $scope.acontecimiento.iconos
+							};
+							console.log($window.actualCoord);
+
+							if ($window.actualCoord.name == 'acontecimiento' || $window.actualCoord.x != iconTarget.x) {
+								$window.actualCoord = iconTarget;
+							} else {
+								$window.actualCoord.name = 'acontecimiento';
+							}
+						};
+
+						$scope.visualizeOverlays = function() {
+							$scope.acontecimiento.iconos.forEach(function(icon,index) {
+								icon.coordenada.x = parseFloat($('#iconX' + index).val());
+								icon.coordenada.y = parseFloat($('#iconY' + index).val());
+								icon.coordenadas = [ icon.coordenada.x,icon.coordenada.y ];
+							});
+							$window.resetOverlays($scope.acontecimiento.iconos);
+						};
+						
+// 						$scope.cargarAcontecimiento = function(){
+// 							$window.open();
+// 						};
+
+					});
+
 	$('#home a').click(function(e) {
-	  e.preventDefault();
-	  console.log('evento ' + e);
-	  $(this).tab('show');
+		e.preventDefault();
+		console.log('evento ' + e);
+		$(this).tab('show');
 	});
-	
+
 	$('#demolist li').on('click', function() {
-	  $('#datebox').val($(this).text());
+		$('#datebox').val($(this).text());
 	});
 	$('#listLineasDeTiempo li').on('click', function() {
-	  $('#lineas').val($(this).text());
+		$('#lineas').val($(this).text());
 	});
-	
+
 	$(function() {
-	  $("#sortable1, #sortable2").sortable({
-	    connectWith: ".connectedSortable"
-	  }).disableSelection();
+		$("#sortable1, #sortable2").sortable({
+			connectWith : ".connectedSortable"
+		}).disableSelection();
 	});
-	
-	
-	
-	$.get("/db/findAll", function(data, status){
+
+	$.get("/db/findAll", function(data, status) {
 		//$('#sortable2').empty();	
-		data.forEach(function(data){
-			var item = "<a href='#' id="+data.id+" class='list-group-item'>"; 
-			item += "<h4 class='list-group-item-heading'>"+data.titulo+"</h4>";
-			item += "<p class='list-group-item-text'>"+data.contenido+"</p>";
+		data.forEach(function(data) {
+			var item = "<a href='#' id="+data.id+" class='list-group-item'>";
+			item += "<h4 class='list-group-item-heading'>" + data.titulo
+					+ "</h4>";
+			item += "<p class='list-group-item-text'>" + data.contenido
+					+ "</p>";
 			item += "</a>";
 			$('#sortable2').append(item);
 		});
-	});	
-	
-	function guardarLinea(){		
+	});
+
+	function guardarLinea() {
 		console.log($("#sortable1"));
 		var acontecimientos = new Array();
-		
+
 		$("#sortable1").children('a').each(function() {
-		  	$this = $(this);
-		  	//console.log($this);
-		  	var id = $this.attr("id");
-		  	//console.log(id);
-		  	if(id == null){
-		  		console.log("null");
-		  	}else{
-		  		acontecimientos.push(id);
-		  	}
+			$this = $(this);
+			//console.log($this);
+			var id = $this.attr("id");
+			//console.log(id);
+			if (id == null) {
+				console.log("null");
+			} else {
+				acontecimientos.push(id);
+			}
 		});
 		console.log(JSON.stringify(acontecimientos));
 		var nombreLinea = $("#nombre-linea").val();
-		console.log("nombreLinea "+ nombreLinea);
-		$.get("/db/saveLineaDeTiempo?titulo="+nombreLinea+"&acontecimientos="+JSON.stringify(acontecimientos), function(data, status){
-		
-		});	
+		console.log("nombreLinea " + nombreLinea);
+		$.get("/db/saveLineaDeTiempo?titulo=" + nombreLinea
+				+ "&acontecimientos=" + JSON.stringify(acontecimientos),
+				function(data, status) {
+
+				});
 	}
-	
 
 	var layer = new ol.layer.Tile({
 		source : new ol.source.OSM()
 	});
 
 	var center = ol.proj.transform([ -60, -31 ], 'EPSG:4326', 'EPSG:3857');
+	
 	var overlay = new ol.Overlay({
 		element : document.getElementById('overlay'),
 		positioning : 'bottom-center'
@@ -397,34 +452,66 @@ app.controller('imgController',function($scope, $http, $window){
 		view : view
 	});
 
-	// register an event handler for the click event
 	map.on('click', function(event) {
-		// extract the spatial coordinate of the click event in map projection units
+
 		var coord = event.coordinate;
-		// transform it to decimal degrees
 		var degrees = ol.proj.transform(coord, 'EPSG:3857', 'EPSG:4326');
-		// format a human readable version
 		console.log('degrees ' + degrees);
 		var hdms = ol.coordinate.toStringXY(degrees, 2);
-		// update the overlay element's content
-		
-		if(actualCoord == 'acontecimiento'){
+
+		if (actualCoord.name == 'acontecimiento') {
 			$('#x').val(hdms.split(',')[0]);
 			$('#y').val(hdms.split(',')[1].trim());
-		}else{
-			$('#'+actualCoord.x).val(hdms.split(',')[0]);
-			$('#'+actualCoord.y).val(hdms.split(',')[1].trim());
+		} else {
+			$('#' + actualCoord.x).val(hdms.split(',')[0]);
+			$('#' + actualCoord.y).val(hdms.split(',')[1].trim());
+			actualCoord.coordenadas = degrees;
 		}
-		
 
-		var element = overlay.getElement();
-		element.innerHTML = hdms;
-		// position the element (using the coordinate in the map's projection)
-		overlay.setPosition(coord);
-		// and add it to the map
-		map.addOverlay(overlay);
 	});
-	actualCoord = 'acontecimiento';
+
+	actualZoom = view.getZoom();
+	actualCoord = {
+		name : 'acontecimiento',
+		icons : []
+	};
+	var actualIcons;
+	function resetOverlays(icons, index) {
+		actualIcons = icons;
+		map.getOverlays().forEach(function(overlay) {
+			map.removeOverlay(overlay);
+		});
+
+		icons.forEach(function(overlay) {
+			icons.index = index;
+			addOverlay(overlay);
+		});
+
+	}
+
+	function addOverlay(overlayInfo) {
+		var div = document.createElement("div");
+		var img = document.createElement("img");
+		img.src = overlayInfo.imgSrc;
+		var imgSize = view.getZoom() * 5 + 50;
+		var imgMaxWidth = 30 + view.getZoom() * 10;
+		img.style.width = imgSize + "%";
+		img.style.maxWidth = imgMaxWidth + "px";
+
+		div.appendChild(img);
+
+		var overlay = new ol.Overlay({
+			element : div,
+			positioning : 'bottom-center'
+		});
+		var pos = ol.proj.transform(overlayInfo.coordenadas, 'EPSG:4326',
+				'EPSG:3857');
+		overlay.setPosition(pos);
+		map.addOverlay(overlay);
+		console.log(overlay.getZIndex());
+		return overlay;
+	}
+
 	
 	
 	

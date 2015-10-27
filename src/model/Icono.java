@@ -1,11 +1,14 @@
 package model;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 
 
@@ -22,7 +25,16 @@ public class Icono {
 	
 	private String nombre;
 
+	@OneToMany(mappedBy="icono") 
+	private List<AcontecimientoIcono> acontecimientoIconos;
 	
+	public List<AcontecimientoIcono> getAcontecimientoIconos() {
+		return acontecimientoIconos;
+	}
+		
+	public void setAcontecimientoIconos(List<AcontecimientoIcono> acontecimientoIconos) {
+		this.acontecimientoIconos = acontecimientoIconos;
+	}
 	
 	public long getId() {
 		return id;

@@ -1,8 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.VBox?>
 
-<fx:root xmlns:fx="http://javafx.com/fxml/1" type="VBox">
-	<!-- TODO Add Nodes -->
-</fx:root>
 
+<fx:root type="VBox" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8">
+   <children>
+      <HBox prefHeight="32.0" prefWidth="200.0">
+         <children>
+            <Label text="Label">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <TextField />
+         </children>
+      </HBox>
+      <HBox prefHeight="31.0" prefWidth="200.0">
+         <children>
+            <Label text="Label">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <TextField />
+         </children>
+      </HBox>
+      <HBox prefHeight="62.0" prefWidth="288.0">
+         <children>
+            <Label text="Label" textAlignment="CENTER">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <DatePicker />
+         </children>
+      </HBox>
+   </children>
+</fx:root>

@@ -48,13 +48,11 @@ function changeMapSrc(cb) {
 function doBounce(acontecimiento, showNavs) {
 	var location = ol.proj.transform(acontecimiento.coordenadas, 'EPSG:4326', 'EPSG:3857');
     
-	// bounce by zooming out one level and back in
 	var bounce = ol.animation.bounce({
       resolution: map.getView().getResolution() * 3,
       duration: 2000
     });
 	
-    // start the pan at the current center of the map
     var pan = ol.animation.pan({
       source: map.getView().getCenter()
     });
@@ -62,6 +60,7 @@ function doBounce(acontecimiento, showNavs) {
     var zoomAnimation = ol.animation.zoom({
     	resolution: map.getView().getResolution()
     });
+   
     if(showNavs){
     	map.once('moveend', function(){
            	console.log("moveEnd");     
@@ -90,21 +89,18 @@ function doBounce(acontecimiento, showNavs) {
     map.beforeRender(bounce);
     map.beforeRender(pan);
     map.beforeRender(zoomAnimation);
-    //map.beforeRender(after);
+  
     
     view.setZoom(acontecimiento.zoom);
-    // when we set the center to the new location, the animated move will
-    // trigger the bounce and pan effects
+  
     map.getView().setCenter(location);
 }
   
 function doPan(location) {
-    // pan from the current center
     var pan = ol.animation.pan({
       source: map.getView().getCenter()
     });
     map.beforeRender(pan);
-    // when we set the new location, the map will pan smoothly to it
     map.getView().setCenter(location);
 }
  
@@ -122,22 +118,42 @@ function setZoom(zoomIn){
 }	
 
 
-function addOverlay(coord){
+function addOverlays(acontecimiento){
+	console.log(acontecimiento);
+	var overlays = new Array();
+	acontecimiento.iconos.forEach(function(icon){
+		overlays.push(addOverlay(icon));
+	});
+	return overlays;
+}
+
+
+function addOverlay(overlayInfo){
 	var div = document.createElement("div");
 	var img = document.createElement("img");
-	img.src = "images/mariano-moreno.png";
+	img.src = "images/icons/"+overlayInfo.src;
+	
+	
 	div.appendChild(img);
 	
 	var overlay = new ol.Overlay({
 		element : div,
 		positioning : 'bottom-center'
 	});  	
-	var pos = ol.proj.transform(coord, 'EPSG:4326', 'EPSG:3857');
+	var pos = ol.proj.transform(overlayInfo.coordenadas, 'EPSG:4326', 'EPSG:3857');
 	overlay.setPosition(pos);
 	map.addOverlay(overlay);
 	return overlay;
 }
 
+
+
+
+function removeOverlays(overlays){
+	overlays.forEach(function(overlay){
+		removeOverlay(overlay);	
+	});
+}
 function removeOverlay(overlay){
 	map.removeOverlay(overlay);
 }

@@ -22,8 +22,7 @@ import view.Menu;
  */
 public class EmbeddedServer extends Application {
 
-	static javax.persistence.EntityManagerFactory emf = Persistence
-			.createEntityManagerFactory("VertxJPA");
+	static javax.persistence.EntityManagerFactory emf = Persistence.createEntityManagerFactory("VertxJPA");
 	static EntityManager em = emf.createEntityManager();
 	static AcontecimientoService acontService = new AcontecimientoService(em);
 	static LineaDeTiempoService lineaService = new LineaDeTiempoService(em);
@@ -40,7 +39,7 @@ public class EmbeddedServer extends Application {
 		Scene scene = new Scene(new Menu(), 1200, 800);
 		primaryStage.setScene(scene);
 		maximize(primaryStage);
-	//	primaryStage.show();
+		// primaryStage.show();
 		primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 			@Override
 			public void handle(WindowEvent event) {

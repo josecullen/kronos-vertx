@@ -39,12 +39,13 @@ public class Util {
 			for(int k = 0; k < acontIconos.size(); k++){
 				JsonObject icono = new JsonObject();
 				Icono ic = acontIconos.get(k).getIcono();
+				JsonArray coordenadas = new JsonArray();
+				coordenadas.add(acontIconos.get(k).getCoordX()).add(acontIconos.get(k).getCoordY());
 				icono
 					.put("nombre", ic.getNombre())
 					.put("src", ic.getId())
-					.put("x", acontIconos.get(k).getCoordX())
-					.put("y", acontIconos.get(k).getCoordY());
-				
+					.put("coordenadas", coordenadas);
+				iconos.add(icono);
 			}
 			
 			acont
