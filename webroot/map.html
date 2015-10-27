@@ -1,202 +1,57 @@
-<!DOCTYPE html>
-<html>
+<html ng-app="app" ng-controller='mapCtrl'>
 <head>
 <meta charset="UTF-8">
-	<link rel='stylesheet' href='/bootstrap/dist/css/bootstrap.min.css'>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" href="/stylesheets/bootstrap-modal-carousel.min.css"> 
-		 	
-    <script type="text/javascript" src="/javascripts/jquery-ui-1.10.4.custom/js/jquery-1.10.2.js"></script>
-    <script type="text/javascript" src="/javascripts/jquery-ui-1.11.4.custom/jquery-ui.min.js"></script>
-    <script type="text/javascript" src="/javascripts/ol.js"></script>
-    <script type="text/javascript" src="/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="/javascripts/angular.min.js"></script>    
-    
-    <link rel="stylesheet" href="/stylesheets/ol.css" type="text/css">
-    <link rel='stylesheet' href='/stylesheets/style.css'>
-    <link rel="stylesheet" type="text/css" href="/stylesheets/samples.css">
-	
-	<script src="/javascripts/bootstrap-modal-carousel.min.js"></script>
-	<script src="/javascripts/demo.min.js"></script>
 
-<title>Mapa</title>
-<style>
-.nav .external {
-	margin-top: 30px;
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel='stylesheet' href='/bootstrap/dist/css/bootstrap.css'>
+<link rel="stylesheet" type="text/css" href="/bootstrap/dist/css/bootstrap-theme.css">
+<link rel="stylesheet" href="/css/ol.css" type="text/css">
+<link rel="stylesheet" href="/css/jc-carousel.css"> 
+
+<script type="text/javascript" src="/js/jquery-ui-1.10.4.custom/js/jquery-1.10.2.js"></script>
+<script type="text/javascript" src="/js/jquery-ui-1.11.4.custom/jquery-ui.min.js"></script>
+<script type="text/javascript" src="/js/angular.js"></script>
+<script type="text/javascript" src="/js/angular-animate.js"></script>
+
+<script type="text/javascript" src="/bootstrap/dist/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/js/ol.js"></script>
+
+<style type="text/css">
+.input-group-addon {
+	min-width: 150px;
 }
 
-.row+.row, .row-fluid+.row-fluid {
-	margin-top: 20px;
+.span-lt {
+	min-width: 50px;
 }
 
-.btn .glyphicon+span {
-	margin-left: .5em;
-}
-
-@media ( min-width : 768px) {
-	h2:first-child, .h2:first-child, h3:first-child, .h3:first-child {
-		margin-top: 0;
-	}
-}
-
-/* EXAMPLE 1 */
-#myModal1 .modal-content {
-	background: rgba(0, 0, 0, .5);
-}
-
-#myModal1 .modal-header {
-	border: 0;
-	color: #fff;
-}
-
-#myModal1 .modal-footer {
-	border-color: rgba(0, 0, 0, .5);
-}
-/* EXAMPLE 2 */
-#myModal2 .modal-content {
-	background: rgba(0, 0, 0, .5);
-}
-
-#myModal2 .modal-header {
-	border: 0;
-	color: #fff;
-}
-
-#myModal2 .modal-footer {
-	border-color: rgba(0, 0, 0, .5);
-}
-
-#myModal2 .carousel-caption {
-	background-color: rgba(0, 0, 0, .5);
-	bottom: -100%;
-	-webkit-transition: bottom 1s;
-	transition: bottom 1s;
-}
-
-#myModal2 .item.active>.carousel-caption {
-	bottom: 0;
-}
 </style>
+<script type="text/javascript" src="/angular/js/app.js"></script>
+<script type="text/javascript" src="/angular/js/controllers-common.js"></script>
+<script type="text/javascript" src="/angular/js/directives-common.js"></script>
+
+<script type="text/javascript" src="angular/js/directive-map.js"></script>
+<script type="text/javascript" src="angular/js/services-map.js"></script>
+<script type="text/javascript" src="angular/js/services-control-map.js"></script>
+<script type="text/javascript" src="angular/js/controller-map.js"></script>
+
+<script type="text/javascript" src="angular/js/controllers-kronos.js"></script>
+<script type="text/javascript" src="angular/js/directives-kronos.js"></script>
+<script type="text/javascript" src="angular/js/db-services.js"></script>
+<script type="text/javascript" src="angular/js/jc-carousel.js"></script>
+
+
 </head>
-<body ng-app="mapview" ng-controller="mapcontroller">
-    	
-	
-	
-	<!-- Presentación -->	
-	<div id="myCarousel2" class="carousel slide carousel-fit" ng-class="{hidden : carousel}"  data-ride="carousel" data-interval="60000">		
-		<div class="carousel-inner">			
-			<div ng-controller="imagenesController" ng-repeat="imagen in acontecimiento.imagenes"  class="item" ng-class="{active: $first}">
-				<img ng-src="/images/user/{{imagen.src}}" alt="First slide">
-				<div class="carousel-caption">
-					<h3>{{imagen.titulo}}</h3>
-					<p>{{imagen.copete}}</p>
-				</div>
-			</div>			
-		</div>
-	</div>  
-	<div class="modal fade modal-fullscreen force-fullscreen " ng-class="{hidden : carousel}" id="myModal2"  tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">					
-					<button type="button" class="btn btn-danger pull-right" data-dismiss="modal" aria-hidden="true">
-						<span class="glyphicon glyphicon-remove"></span>
-						<span>Close</span>
-					</button>
-					<h3 class="modal-title">{{acontecimiento.titulo}}</h3>
-					<h4 class="modal-title">{{acontecimiento.contenido}}</h4>
-				</div>
-				<div class="modal-body">
-					<p>One fine body&hellip;</p>
-				</div>
-				<div class="modal-footer">
-					<a class="left carousel-control" href="#myCarousel2" data-slide="prev">
-						<span class="glyphicon glyphicon-chevron-left"></span>
-					</a>
-					<a class="right carousel-control" href="#myCarousel2" data-slide="next">
-						<span class="glyphicon glyphicon-chevron-right"></span>
-					</a>
-				</div>
-			</div>
-		</div>
-	</div>
 
-
-<div id="map" class="map"></div>
-  
-  <nav id="topNav" class="navbar navbar-default navbar-fixed-top topNavHide">
-    <div class="container">
-        <h1>{{acontecimiento.titulo}}</h1>
-    </div>
-  </nav>
-
-  <nav id="bottomNav" class="navbar navbar-default navbar-fixed-bottom bottomNavHide">
-    <div class="container">
-        <h1 class="lead">{{acontecimiento.fecha}}</h1>
-    </div>
-  </nav>
-  	
-	<!-- Navs de viaje  	 -->
-  	<button type="button" ng-click="openControl()" class="btn btn-default badge" aria-label="Left Align">
-      <span class="glyphicon glyphicon-blackboard" aria-hidden="true"></span>
-    </button>  
-  	<div class="btn-group" data-toggle="buttons">
-	  	<label class="btn btn-primary active" onclick='changeMapSrc(this);'>
-	    	<input id="srcLocal" type="checkbox" onclick='changeMapSrc(this);' checked> Mapas Locales
-	  	</label>
-	</div>
-  	<button type="button" onclick="openContentModal();" class="btn btn-default badge" aria-label="Left Align">Content Modal</button>  
-
-
-
-
-
+<body id="root">
+	<jc-carousel slides="acontecimiento.imagenes"></jc-carousel>
+	<jc-map  ></jc-map>
 </body>
+<script src="/js/bootstrap-modal-carousel.js"></script>
+<script src="/js/demo.min.js"></script>
 
-
-
-<script type="text/javascript" src="/javascripts/map.js"></script>
-   
-<script type="text/javascript">	  
-    var app = angular.module('mapview', []);
-    app.controller('mapcontroller', function($scope, $window){
-	    $scope.acontecimiento = {
-	    	titulo: "Revulución de Mayo",
-	    	fecha: "1810, 25 de Mayo"
-	    };
-	    $scope.openControl = function() {
-	    	console.log("open");
-	    	console.log($scope.acontecimiento);
-	  		control = $window.open("control2.html", "windowName", "resizable=yes");
-		}
-		$scope.showImagenes = function(){
-    		$scope.carousel = true;
-    		$('#myModal2').modal({
-				local: '#myCarousel2'
-			});
-    	};
-    	
-    	$scope.hideImagenes = function(){
-    		$scope.carousel = false;
-    		console.log("hide");
-    		
-			$('#myModal2').modal('hide');
-			
-    	};
-    	
-    });
-    
-    app.controller('imagenesController', function($scope, $window){   });
-    
-    var openContentModal = function(){
-    	$('#contentModal').modal('hide');
-    }
-      
-    var control;
-   
-
-	window.onload = function(){
-		
-//     	getUpdate();
-    }  
-</script>
 </html>
+
+
+
+
