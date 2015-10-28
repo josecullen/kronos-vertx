@@ -17,6 +17,9 @@ mapServices.factory('MapInstance', function(view, osmLayer,doZoom, flyTo, addOve
 	};
 	
 	Map.flyTo = function(coordenadas){
+		Map.map.once('moveend', function(){
+	    	Map.moveEndEvent();
+	    });
 		flyTo(Map.map, coordenadas);
 	};	
 	
@@ -27,6 +30,11 @@ mapServices.factory('MapInstance', function(view, osmLayer,doZoom, flyTo, addOve
 	Map.removeOverlay = function(overlayAdded){
 		removeOverlay(Map.map, overlayAdded);
 	}
+	
+	Map.moveEndEvent = function(){ console.log("moveend")};
+	
+    
+
 	
 	
 	return Map;

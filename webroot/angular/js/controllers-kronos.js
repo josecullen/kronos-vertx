@@ -7,8 +7,8 @@ kronosControllers.controller("knAcontecimientoCtrl", function($scope) {
 		//var overlayInfo = {src: src, coordenadas: coordenadas};
 		$scope.$emit('bcAddOverlay', acontecimiento);
 	};
-	$scope.flyTo = function(coordenadas){
-		$scope.$emit('bcFlyTo', coordenadas);
+	$scope.flyTo = function(acontecimiento){
+		$scope.$emit('bcFlyTo', acontecimiento);
 	}
 	$scope.showImagenes = function(acontecimiento){
 		$scope.$emit('showImagenes', acontecimiento);

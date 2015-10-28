@@ -20,9 +20,11 @@ mapControllers.controller("mapController", function($scope, MapInstance) {
 	
 	$scope.$on('removeOverlay', function(e, overlayAdded){
 		console.log('mapController removeOverlay');
-		//var overlayRemoved = 
 		MapInstance.removeOverlay(overlayAdded);
-		//$scope.$emit('overlayRemoved', overlayRemoved);
+	});
+	
+	$scope.$on('setMoveEnd', function(e, newMoveEndEvent){
+		MapInstance.moveEndEvent = newMoveEndEvent;
 	});
 
 });

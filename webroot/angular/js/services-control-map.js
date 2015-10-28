@@ -35,6 +35,8 @@ mapControlServices.factory('flyTo', function(){
 	    	resolution: map.getView().getResolution()
 	    });
 	    
+
+	    
 	    map.beforeRender(bounce);
 	    map.beforeRender(pan);
 	    map.beforeRender(zoomAnimation);	  

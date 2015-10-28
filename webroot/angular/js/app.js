@@ -47,19 +47,27 @@ app.controller('appCtrl', function($scope, $window, lineaPrueba, $interval) {
 		$scope.acontecimientoOverlay.overlay = overlayAdded;
 	});
 
-	$scope.$on('bcFlyTo', function(e, coordenadas) {
+	$scope.$on('bcFlyTo', function(e, acontecimiento) {
 		console.log('appCtrl bcAddOverlay');
-		$scope.$broadcast('flyTo', coordenadas);
-		$scope.mapScope.flyTo(coordenadas);
+		$scope.acontecimientoOverlay = acontecimiento;		
+		
+		$scope.$broadcast('setMoveEnd', function(){
+			console.log('otro evento');
+			$scope.showImagenes(acontecimiento);
+		});
+		
+		if(!$scope.acontecimientoOverlay.overlay){
+			var overlayInfo = {src: $scope.acontecimientoOverlay.icono, coordenadas: $scope.acontecimientoOverlay.coordenadas};
+			$scope.$broadcast('addOverlay', overlayInfo);
+			$scope.mapScope.addOverlay(overlayInfo);
+		}		
+		$scope.$broadcast('flyTo', acontecimiento.coordenadas);
+		$scope.mapScope.flyTo(acontecimiento.coordenadas);
 	});	
 
 	$scope.$on('setAcontecimiento', function(e, acontecimiento) {
 		$scope.acontecimiento = acontecimiento;
 	});
-
-	$scope.showImagen = function(acontecimiento, imagen) {
-
-	}
 
 	$scope.resources = {
 		controlFooter : "angular/partials/control-footer.html",
