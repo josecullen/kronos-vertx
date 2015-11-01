@@ -4,23 +4,11 @@ nav button {
 }
 </style>
 <nav class="navbar navbar-inverse navbar-fixed-bottom">
-	<!-- 	<div class="container"> -->
-	<div class="navbar-header">
-		<!-- 			<div class="btn-group btn-group-lg" role="group"> -->
-		<!-- 				<button type="submit" class="btn btn-sq glyphicon glyphicon-arrow-left"></button> -->
-		<!-- 				<button type="submit" class="btn btn-sq-lg glyphicon glyphicon-arrow-right"></button> -->
-		<!-- 			</div> -->
-	</div>
-
-	<!-- 		<h4 class="navbar-text">{{linea.titulo}}: {{acontecimiento.titulo}}</h4> -->
+	<div class="navbar-header">{{acontecimiento.titulo}}</div>
 
 	<div class="btn-group btn-group-lg navbar-right" role="group">
-					<button ng-click="zoomIn()" class="btn btn-sq glyphicon glyphicon-plus"></button>
-					<button ng-click="zoomOut()" class="btn btn-sq-lg glyphicon glyphicon-minus"></button>
-<!-- 					<button ng-click="linkCenter()" class="glyphicon glyphicon-magnet"></button> -->
-		<!-- 			<button type="submit" class="btn btn-sq-lg glyphicon glyphicon-send"></button> -->
-		<!-- 			<button type="submit" class="btn btn-sq-lg glyphicon glyphicon-bookmark"></button> -->
+		<button ng-click="zoomIn()" class="btn btn-sq glyphicon glyphicon-plus"></button>
+		<button ng-click="zoomOut()" class="btn btn-sq-lg glyphicon glyphicon-minus"></button>
 		<button ng-click="openMap()" class="btn btn-sq-lg glyphicon glyphicon-new-window pull-right"></button>
 	</div>
-	<!-- 	</div> -->
 </nav>

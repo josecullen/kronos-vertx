@@ -8,13 +8,7 @@ import javafx.scene.Scene;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-
-import javax.persistence.EntityManager;
-import javax.persistence.Persistence;
-
 import server.CentralVerticle;
-import service.AcontecimientoService;
-import service.LineaDeTiempoService;
 import view.Menu;
 
 /*
@@ -22,10 +16,6 @@ import view.Menu;
  */
 public class EmbeddedServer extends Application {
 
-	static javax.persistence.EntityManagerFactory emf = Persistence.createEntityManagerFactory("VertxJPA");
-	static EntityManager em = emf.createEntityManager();
-	static AcontecimientoService acontService = new AcontecimientoService(em);
-	static LineaDeTiempoService lineaService = new LineaDeTiempoService(em);
 	static int i = 0;
 	static JsonObject update = new JsonObject().put("sended", true);
 

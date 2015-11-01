@@ -4,8 +4,7 @@ var kronosControllers = angular.module('knControllers', ['mapDirectives', 'mapSe
 kronosControllers.controller("knAcontecimientoCtrl", function($scope) {
 	$scope.addOverlay = function(acontecimiento){
 		console.log("kronos addOverlay");
-		//var overlayInfo = {src: src, coordenadas: coordenadas};
-		$scope.$emit('bcAddOverlay', acontecimiento);
+		$scope.$emit('bcToggleOverlay', acontecimiento);
 	};
 	$scope.flyTo = function(acontecimiento){
 		$scope.$emit('bcFlyTo', acontecimiento);

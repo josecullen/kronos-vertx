@@ -13,7 +13,8 @@ mapControlServices.factory('doZoom', function(){
 mapControlServices.factory('flyTo', function(){
 	return function(map, coordenadas){
 		var zoom;
-		console.log(coordenadas);
+		
+		
 		if(coordenadas.length == 3){
 			zoom = coordenadas[2];
 		}else{
@@ -21,28 +22,31 @@ mapControlServices.factory('flyTo', function(){
 		}
 		
 		var location = ol.proj.transform(coordenadas, 'EPSG:4326', 'EPSG:3857');
-	    
-		var bounce = ol.animation.bounce({
-	      resolution: map.getView().getResolution() * 3,
-	      duration: 2000
-	    });
+	
+		if(location[0] != map.getView().getCenter()[0] || location[1] != map.getView().getCenter()[1]){
+			var bounce = ol.animation.bounce({
+			      resolution: map.getView().getResolution() * 3,
+			      duration: 2000
+			    });
+				
+			    var pan = ol.animation.pan({
+			      source: map.getView().getCenter()
+			    });
+			    
+			    var zoomAnimation = ol.animation.zoom({
+			    	resolution: map.getView().getResolution()
+			    });
+			    
+			    map.beforeRender(bounce);
+			    map.beforeRender(pan);
+			    map.beforeRender(zoomAnimation);	  
+			    
+			    map.getView().setZoom(zoom);	  
+			    map.getView().setCenter(location);
+		}
 		
-	    var pan = ol.animation.pan({
-	      source: map.getView().getCenter()
-	    });
-	    
-	    var zoomAnimation = ol.animation.zoom({
-	    	resolution: map.getView().getResolution()
-	    });
-	    
-
-	    
-	    map.beforeRender(bounce);
-	    map.beforeRender(pan);
-	    map.beforeRender(zoomAnimation);	  
-	    
-	    map.getView().setZoom(zoom);	  
-	    map.getView().setCenter(location);
+		
+		
 	}	
 });
 

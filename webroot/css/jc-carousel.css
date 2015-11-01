@@ -225,6 +225,7 @@ h1.carousel.ng-enter, h2.carousel.ng-enter, h3.carousel.ng-enter {
 
 
 
+
 .imagen-if {
   position: relative;
   left: -50%;
@@ -268,4 +269,5 @@ h1.carousel.ng-enter, h2.carousel.ng-enter, h3.carousel.ng-enter {
   opacity: 0;
 }
 /* Fin Animación de cambio de imagen */
+
 

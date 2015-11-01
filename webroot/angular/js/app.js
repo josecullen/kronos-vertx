@@ -4,19 +4,51 @@ var app = angular.module('app', [ 'componentsModule','ngAnimate', 'commonDirecti
 		'mapControllers', 'mapServices', 'kronosDirectives', 'dbServices', 'jc-carousel' ]);
 
 app.controller('appCtrl', function($scope, $window, lineaPrueba, $interval) {
+	$scope.resources = {
+		controlFooter : "angular/partials/control-footer.html",
+		controlSidebar : "angular/partials/control-sidebar.html",
+//		carousel : "angular/partials/carousel.html",
+		detailPane : "angular/partials/detail-pane.html"
+	}
+	$scope.zoom = 6; 
 	$scope.linea = lineaPrueba;
 	$scope.acontecimientos = lineaPrueba.acontecimientos;
 	$scope.mapWindow;
 	$scope.mapScope;
 	$scope.acontecimiento;
-	$scope.acontecimientoOverlay;
+	$scope.acontecimientoOverlay;	
 	
+	$scope.openMap = function() {
+		$scope.mapWindow = $window.open("map.html", "mapWindow", "resizable=yes");
+		$interval(function() {
+			$scope.mapScope = $scope.mapWindow.angular.element("#root").scope();
+		}, 1000);
+	};
 	
 	$scope.showImagenes = function(acontecimiento){
 		$scope.acontecimiento = acontecimiento;
 		$scope.mapScope.acontecimiento = acontecimiento;
 		$scope.mapScope.toggleCarousel();
 	}
+	
+	$scope.showAcontecimientoInfo = function(acontecimiento){
+		$scope.acontecimiento = acontecimiento;
+		$scope.mapScope.acontecimiento = acontecimiento;
+		$scope.mapScope.showAcontecimientoInfo();
+	}
+	
+	
+	$scope.flyAndShowImagenes = function(acontecimiento){
+		$scope.addOverlay(acontecimiento);
+		
+		$scope.$broadcast('setMoveEnd', function(){
+			$scope.showImagenes(acontecimiento);
+		});		
+		
+		$scope.$broadcast('flyTo', acontecimiento.coordenadas);
+		$scope.mapScope.flyTo(acontecimiento.coordenadas);
+	}
+	
 	$scope.$on('showImagenes', function(e, acontecimiento) {
 		$scope.showImagenes(acontecimiento);
 	});
@@ -28,8 +60,8 @@ app.controller('appCtrl', function($scope, $window, lineaPrueba, $interval) {
 		$scope.mapScope.nextSlide();
 	}	
 
-	$scope.$on('bcAddOverlay', function(e, acontecimiento) {
-		console.log('appCtrl bcAddOverlay');
+	$scope.$on('bcToggleOverlay', function(e, acontecimiento) {
+		console.log('appCtrl bcToggleOverlay');
 		$scope.acontecimientoOverlay = acontecimiento;		
 		if($scope.acontecimientoOverlay.overlay){
 			$scope.mapScope.removeOverlay($scope.acontecimientoOverlay.overlay);
@@ -42,6 +74,16 @@ app.controller('appCtrl', function($scope, $window, lineaPrueba, $interval) {
 		}		
 	});
 	
+	$scope.addOverlay = function(acontecimiento){
+		$scope.acontecimientoOverlay = acontecimiento;		
+
+		if(!$scope.acontecimientoOverlay.overlay){
+			var overlayInfo = {src: $scope.acontecimientoOverlay.icono, coordenadas: $scope.acontecimientoOverlay.coordenadas};
+			$scope.$broadcast('addOverlay', overlayInfo);
+			$scope.mapScope.addOverlay(overlayInfo);
+		}
+	};
+	
 	$scope.$on('overlayAdded', function(e, overlayAdded){
 		console.log('overlayAdded');
 		$scope.acontecimientoOverlay.overlay = overlayAdded;
@@ -49,18 +91,14 @@ app.controller('appCtrl', function($scope, $window, lineaPrueba, $interval) {
 
 	$scope.$on('bcFlyTo', function(e, acontecimiento) {
 		console.log('appCtrl bcAddOverlay');
-		$scope.acontecimientoOverlay = acontecimiento;		
+		
+		$scope.addOverlay(acontecimiento);
 		
 		$scope.$broadcast('setMoveEnd', function(){
-			console.log('otro evento');
-			$scope.showImagenes(acontecimiento);
+			$scope.showAcontecimientoInfo(acontecimiento);
+//			$scope.showImagenes(acontecimiento);
 		});
 		
-		if(!$scope.acontecimientoOverlay.overlay){
-			var overlayInfo = {src: $scope.acontecimientoOverlay.icono, coordenadas: $scope.acontecimientoOverlay.coordenadas};
-			$scope.$broadcast('addOverlay', overlayInfo);
-			$scope.mapScope.addOverlay(overlayInfo);
-		}		
 		$scope.$broadcast('flyTo', acontecimiento.coordenadas);
 		$scope.mapScope.flyTo(acontecimiento.coordenadas);
 	});	
@@ -68,22 +106,7 @@ app.controller('appCtrl', function($scope, $window, lineaPrueba, $interval) {
 	$scope.$on('setAcontecimiento', function(e, acontecimiento) {
 		$scope.acontecimiento = acontecimiento;
 	});
-
-	$scope.resources = {
-		controlFooter : "angular/partials/control-footer.html",
-		controlSidebar : "angular/partials/control-sidebar.html",
-		carousel : "angular/partials/carousel.html",
-		detailPane : "angular/partials/detail-pane.html"
-	}
-
-	$scope.openMap = function() {
-		$scope.mapWindow = $window.open("map.html", "mapWindow", "resizable=yes");
-		$interval(function() {
-			$scope.mapScope = $scope.mapWindow.angular.element("#root").scope();
-		}, 1000);
-	};
 	
-	$scope.zoom = 6; 
 	$scope.zoomIn = function(){
 		$scope.zoom++;
 	};
@@ -99,25 +122,23 @@ app.controller('appCtrl', function($scope, $window, lineaPrueba, $interval) {
 	$scope.doZoom = function(zoom) {
 		$scope.$broadcast('zoom', zoom);
 	}
-	
-	
-//	$scope.linkCenter = function(zoom)
 
 });
 
 app.controller('mapCtrl', function($scope, $window) {
+	$scope.resources = {
+		controlFooter : "angular/partials/control-footer.html",
+		controlSidebar : "angular/partials/control-sidebar.html",
+//		carousel : "angular/partials/carousel.html"
+	}
+	$scope.controlScope = window.opener.angular.element('#controlRoot').scope();
+	$scope.acontecimiento = {};
+	$scope.showInfo = true;
+	
 	$scope.carousel = {
 		toggleCarousel : false,
 		toggleNavs : true
 	};
-	$scope.setZoom = function(zoom){
-		$scope.$broadcast('zoom', zoom);
-	}
-	
-	
-	
-	$scope.controlScope = window.opener.angular.element('#controlRoot').scope();
-	$scope.acontecimiento = {};
 
 	$scope.addOverlay = function(overlayInfo) {
 		$scope.$broadcast('addOverlay', overlayInfo);
@@ -129,25 +150,22 @@ app.controller('mapCtrl', function($scope, $window) {
 	$scope.flyTo = function(coordenadas) {
 		$scope.$broadcast('flyTo', coordenadas);
 	}
-	
-	
-	$scope.resources = {
-		controlFooter : "angular/partials/control-footer.html",
-		controlSidebar : "angular/partials/control-sidebar.html",
-		carousel : "angular/partials/carousel.html"
-	}
 
 	$scope.toggleCarousel = function() {
 		$scope.carousel.toggleCarousel = !$scope.carousel.toggleCarousel;
-		$scope.$broadcast('toggleCarousel',
-		$scope.carousel.toggleCarousel);
-	}
-	$scope.toggleCarouselNavs = function() {
-		$scope.carousel.toggleNavs = !$scope.carousel.toggleNavs;
-		$scope.$broadcast('toggleNavs',
-		$scope.carousel.toggleNavs);
+		$scope.$broadcast('toggleCarousel',	$scope.carousel.toggleCarousel);
 	}
 
+	
+	$scope.showAcontecimientoInfo = function(){	
+		$scope.$broadcast('showInfo', {});
+	};
+	
+	
+	
+	$scope.setZoom = function(zoom){
+		$scope.$broadcast('zoom', zoom);
+	}	
 	$scope.nextSlide = function() {
 		$scope.$broadcast('nextSlide');
 	}
@@ -160,5 +178,4 @@ app.controller('mapCtrl', function($scope, $window) {
 
 });
 
-app.controller('imagenesController', function($scope, $window) {
-});
+app.controller('imagenesController', function($scope, $window) {});

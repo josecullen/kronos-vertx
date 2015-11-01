@@ -37,6 +37,19 @@ carousel.controller('carouselCtrl', function($scope) {
 	});
 });
 
+carousel.controller('infoNavCtrl', function($scope) {
+	$scope.showInfo = true;
+	$scope.titulo = "Título";
+	$scope.$on('showInfo', function(){
+		console.log("showInfo "+$scope.showInfo);
+		$scope.showInfo = !$scope.showInfo;
+		$scope.$apply();
+	});
+});
+
+
+
+
 carousel.directive('jcCarousel', function() {
 	return {
 		controller: 'carouselCtrl',
@@ -44,5 +57,15 @@ carousel.directive('jcCarousel', function() {
 			slides : '='
 		},
 		templateUrl : '/angular/views/jc-carousel.html'
+	}
+});
+
+carousel.directive('jcInfoNav', function() {
+	return {
+		controller : 'infoNavCtrl',
+		scope : {
+			info : '='
+		},
+		templateUrl : '/angular/views/jc-info-nav.html'
 	}
 });
