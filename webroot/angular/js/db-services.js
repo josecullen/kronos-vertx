@@ -4,6 +4,7 @@ dbServices.factory('lineaPrueba', function(){
 	var linea = {
 		titulo: "Primera Invasión Inglesa",
 		acontecimientos: [{
+			id: 1,
 			titulo: "Ataque de los ingleses",
 			icono: "sables-sm.png",
 			coordenadas: [-58.32, -34.61, 12],
@@ -18,6 +19,7 @@ dbServices.factory('lineaPrueba', function(){
 				src: "/images/user/fuerte-bsas.jpg"
 			}]			
 		},{
+			id: 13,
 			titulo: "Huída de Sobremonte",
 			icono: "carruaje-sm.png",
 			coordenadas: [-62.30, -33.64, 10],
@@ -28,6 +30,7 @@ dbServices.factory('lineaPrueba', function(){
 				src: "/images/user/sobremonte.jpg"
 			}]
 		},{
+			id: 3,
 			titulo: "Batalla por la reconquista",
 			icono: "sables-sm.png",
 			coordenadas: [-58.32, -34.61, 12],
@@ -42,6 +45,7 @@ dbServices.factory('lineaPrueba', function(){
 				src: "/images/user/invasion-inglesa02.jpg"
 			}]
 		},{
+			id: 44,
 			titulo: "Deposición de Sobremonte. Interinato de Liniers.",
 			icono: "cabildo-sm.png",
 			coordenadas: [-58.37, -34.60, 12],
@@ -51,9 +55,8 @@ dbServices.factory('lineaPrueba', function(){
 				contenido: "El Cabildo designa Virrey a Liniers, en lo que fue la primera decisión sin el aval de la corona española.",
 				src: "/images/user/liniers.jpg"
 			}]
-		},
-		
-		{
+		},{
+			id: 12,
 			titulo: "Noticia de la deposición del Rey de España.",
 			icono: "fragata-sm.png",
 			fecha: "13-05-1810",
@@ -69,6 +72,7 @@ dbServices.factory('lineaPrueba', function(){
 				src:"/images/user/belgrano.jpg"
 			}]			
 		},{
+			id: 15,
 			titulo: "Revolución de Mayo",
 			icono: "cabildo-sm.png",
 			fecha: "25-05-1810",
@@ -95,6 +99,7 @@ dbServices.factory('lineaPrueba', function(){
 				src: "/images/user/primera-junta.jpg"
 			}]
 		},{
+			id: 22,
 			titulo: "Éxodo Jujeño",
 			icono: "sables-sm.png",
 			fecha: "23-08-1812",

@@ -2,11 +2,27 @@
 nav button {
 	margin-right: 20px;
 }
+
+h1.info, h2.info, h3.info, h4.info{
+  opacity: 0.7;
+  color: #CCCCCC;
+}
 </style>
 <nav class="navbar navbar-inverse navbar-fixed-bottom">
-	<div class="navbar-header">{{acontecimiento.titulo}}</div>
-
-	<div class="btn-group btn-group-lg navbar-right" role="group">
+	<div class="navbar-header">
+		<h3 class="info" style="display: inline-block;">{{linea.titulo}}: <h4 class="info" style="display: inline">{{acontecimiento.titulo}}</h4></h3>
+		
+	</div>
+	
+	<div class="btn-group btn-group-lg navbar-left" role="group">		
+		
+	</div>
+	
+	
+	
+	<div class="btn-group btn-group-lg navbar-right" role="group">		
+	<button ng-click="flyPrevious()" class="btn btn-sq glyphicon glyphicon-chevron-left"></button>
+		<button ng-click="flyNext()" class="btn btn-sq glyphicon glyphicon-chevron-right"></button>
 		<button ng-click="zoomIn()" class="btn btn-sq glyphicon glyphicon-plus"></button>
 		<button ng-click="zoomOut()" class="btn btn-sq-lg glyphicon glyphicon-minus"></button>
 		<button ng-click="openMap()" class="btn btn-sq-lg glyphicon glyphicon-new-window pull-right"></button>

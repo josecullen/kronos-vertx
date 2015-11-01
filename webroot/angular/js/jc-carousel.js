@@ -7,6 +7,7 @@ carousel.controller('carouselCtrl', function($scope) {
 
 	$scope.$on('toggleCarousel', function(e, toggle) {
 		$scope.carousel = toggle;
+		$scope.count = 0;
 		$scope.$apply();
 	});
 

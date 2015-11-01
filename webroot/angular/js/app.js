@@ -15,7 +15,6 @@ app.controller('appCtrl', function($scope, $window, lineaPrueba, $interval) {
 	$scope.acontecimientos = lineaPrueba.acontecimientos;
 	$scope.mapWindow;
 	$scope.mapScope;
-	$scope.acontecimiento;
 	$scope.acontecimientoOverlay;	
 	
 	$scope.openMap = function() {
@@ -29,6 +28,7 @@ app.controller('appCtrl', function($scope, $window, lineaPrueba, $interval) {
 	$scope.showImagenes = function(acontecimiento){
 		$scope.acontecimiento = acontecimiento;
 		$scope.mapScope.acontecimiento = acontecimiento;
+		$scope.mapScope.$apply();
 		$scope.mapScope.toggleCarousel();
 	}
 	
@@ -90,9 +90,7 @@ app.controller('appCtrl', function($scope, $window, lineaPrueba, $interval) {
 		$scope.acontecimientoOverlay.overlay = overlayAdded;
 	});
 
-	$scope.$on('bcFlyTo', function(e, acontecimiento) {
-		console.log('appCtrl bcAddOverlay');
-		
+	$scope.flyTo = function(acontecimiento){
 		$scope.addOverlay(acontecimiento);
 		$scope.mapScope.hideCarousel();
 		$scope.$broadcast('setMoveEnd', function(){
@@ -101,8 +99,40 @@ app.controller('appCtrl', function($scope, $window, lineaPrueba, $interval) {
 		
 		$scope.$broadcast('flyTo', acontecimiento.coordenadas);
 		$scope.mapScope.flyTo(acontecimiento.coordenadas);
+	}	
+	
+	$scope.$on('bcFlyTo', function(e, acontecimiento) {		
+		$scope.flyTo(acontecimiento);
 	});	
 
+	$scope.flyNext = function(){
+		var id = $scope.acontecimiento.id;
+		for(var i = 0; i < $scope.linea.acontecimientos.length; i++){
+			var acont = $scope.linea.acontecimientos[i];
+			if(id == acont.id){
+				if(i+1 != $scope.linea.acontecimientos.length){
+					$scope.acontecimiento = $scope.linea.acontecimientos[i+1];
+					$scope.flyTo($scope.acontecimiento);
+				}				
+			}
+		}
+	}
+	
+	$scope.flyPrevious = function(){
+		var id = $scope.acontecimiento.id;
+		for(var i = 0; i < $scope.linea.acontecimientos.length; i++){
+			var acont = $scope.linea.acontecimientos[i];
+			if(id == acont.id){
+				if(i-1 != -1){
+					$scope.acontecimiento = $scope.linea.acontecimientos[i-1];
+					$scope.flyTo($scope.acontecimiento);
+				}				
+			}
+		}
+
+	}
+	
+	
 	$scope.$on('setAcontecimiento', function(e, acontecimiento) {
 		$scope.acontecimiento = acontecimiento;
 	});
