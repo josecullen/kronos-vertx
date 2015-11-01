@@ -11,16 +11,19 @@
 </div>
 
 <nav class="navbar navbar-inverse navbar-fixed-top carousel-top-nav" ng-if="carousel && navOnOff">
-	<div ng-repeat="slide in slides" style="display: inline-block">
-		<h1 class="carousel" ng-if="count == $index" >{{slide.titulo}}
-		</h1>
-	</div>
-	<h2 class="pull-right info">{{fecha}}</h2>
+	<div class="row">
+			<h1 class="carousel" style="text-align: center">{{titulo}}</h1>
+			<div ng-repeat="slide in slides" style="display: inline-block;">
+				<h2 class="pull-left carousel" ng-if="count == $index">{{slide.titulo}}</h2>
+			</div>
+			<h2 class="pull-right info">{{fecha}}</h2>
+
+	</div>	
 </nav>
 
 <nav class="navbar navbar-inverse navbar-fixed-bottom carousel-bottom-nav" ng-if="carousel && navOnOff">
 	<div class="container" ng-repeat="slide in slides">
-		<h3 class="carousel" ng-if="count == $index">{{slide.contenido}}</h3>
+		<h2 class="carousel" ng-if="count == $index">{{slide.contenido}}</h2>
 	</div>
 </nav>
 

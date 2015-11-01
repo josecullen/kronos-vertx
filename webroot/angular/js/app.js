@@ -22,6 +22,7 @@ app.controller('appCtrl', function($scope, $window, lineaPrueba, $interval) {
 		$scope.mapWindow = $window.open("map.html", "mapWindow", "resizable=yes");
 		$interval(function() {
 			$scope.mapScope = $scope.mapWindow.angular.element("#root").scope();
+			$scope.mapScope.tituloLinea = $scope.linea.titulo;
 		}, 1000);
 	};
 	
@@ -93,10 +94,9 @@ app.controller('appCtrl', function($scope, $window, lineaPrueba, $interval) {
 		console.log('appCtrl bcAddOverlay');
 		
 		$scope.addOverlay(acontecimiento);
-		
+		$scope.mapScope.hideCarousel();
 		$scope.$broadcast('setMoveEnd', function(){
 			$scope.showAcontecimientoInfo(acontecimiento);
-//			$scope.showImagenes(acontecimiento);
 		});
 		
 		$scope.$broadcast('flyTo', acontecimiento.coordenadas);
@@ -132,6 +132,7 @@ app.controller('mapCtrl', function($scope, $window) {
 //		carousel : "angular/partials/carousel.html"
 	}
 	$scope.controlScope = window.opener.angular.element('#controlRoot').scope();
+	$scope.tituloLinea = "";
 	$scope.acontecimiento = {};
 	$scope.showInfo = true;
 	
@@ -153,6 +154,11 @@ app.controller('mapCtrl', function($scope, $window) {
 
 	$scope.toggleCarousel = function() {
 		$scope.carousel.toggleCarousel = !$scope.carousel.toggleCarousel;
+		$scope.$broadcast('toggleCarousel',	$scope.carousel.toggleCarousel);
+	}
+	
+	$scope.hideCarousel = function(){
+		$scope.carousel.toggleCarousel = false;
 		$scope.$broadcast('toggleCarousel',	$scope.carousel.toggleCarousel);
 	}
 

@@ -54,6 +54,7 @@ carousel.directive('jcCarousel', function() {
 	return {
 		controller: 'carouselCtrl',
 		scope : {
+			titulo: '=',
 			fecha: '=',
 			slides : '='
 		},
