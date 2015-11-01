@@ -54,6 +54,7 @@ carousel.directive('jcCarousel', function() {
 	return {
 		controller: 'carouselCtrl',
 		scope : {
+			fecha: '=',
 			slides : '='
 		},
 		templateUrl : '/angular/views/jc-carousel.html'

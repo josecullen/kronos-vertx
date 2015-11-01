@@ -28,7 +28,9 @@ nav.info.ng-leave{
 <div ng-controller="infoNavCtrl" >
 	<nav class="navbar navbar-inverse navbar-fixed-top info" ng-if="showInfo">
 		<div>
-			<h1>{{info.titulo}}</h1>
+			<h1 class="info"  style="display: inline-block">{{info.titulo}}
+			<h2 class="pull-right info">{{info.fecha}}</h2></h1>
+			
 		</div>
 	</nav>
 </div>

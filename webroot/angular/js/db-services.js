@@ -2,30 +2,36 @@ var dbServices = angular.module('dbServices', []);
 
 dbServices.factory('lineaPrueba', function(){
 	var linea = {
-		titulo: "Independencia Argentina",
+		titulo: "Primera Invasión Inglesa",
 		acontecimientos: [{
-			titulo: "Primera Invasión Inglesa",
+			titulo: "Ataque de los ingleses",
 			icono: "sables-sm.png",
 			coordenadas: [-58.32, -34.61, 12],
-			contenido: "Las fuerzas del virreynato son escasas y no pueden hacer nada para defenderse. Las fuerzas inglesas llegan sin inconvenientes hasta el fuerte, la actual casa rosada.",
+			fecha: "27 de Junio de 1806",
 			imagenes: [{
+				titulo: "William Carr Beresford: comandante de las fuerzas inglesas",
+				contenido: "William Carr Beresford comandaba unos 1560 soldados ingleses, que desembarcaron en la localidad de Quilmes.",
+				src: "/images/user/beresford.jpg"
+			},{
 				titulo: "Primera Invasión Inglesa",
 				contenido: "Las fuerzas del virreynato son escasas y no pueden hacer nada para defenderse. Las fuerzas inglesas llegan sin inconvenientes hasta el fuerte, la actual casa rosada.",
 				src: "/images/user/fuerte-bsas.jpg"
 			}]			
 		},{
-			titulo: "Primera Invasión Inglesa II",
+			titulo: "Huída de Sobremonte",
 			icono: "carruaje-sm.png",
 			coordenadas: [-62.30, -33.64, 10],
+			fecha: "¿24? de Junio de 1806",
 			imagenes:[{
-				titulo: "Huída de Sobremonte",
+				titulo: "Rafael de Sobremonte huye a Córdoba",
 				contenido: "El virrey Rafael Sobremonte escapa con todas las riquezas, dejando la capital a merced de los invasores. Los ingleses lo alcanzan, camino a Córdoba.",
 				src: "/images/user/sobremonte.jpg"
 			}]
 		},{
-			titulo: "Primera Invasión Inglesa III",
+			titulo: "Batalla por la reconquista",
 			icono: "sables-sm.png",
 			coordenadas: [-58.32, -34.61, 12],
+			fecha: "12 de Agosto de 1806",
 			imagenes: [{
 				titulo: "Santiago Liniers: lider de la reconquista",
 				contenido: "Santiago Liniers cuenta con alrededor de 1000 hombres, pero mientras se acerca al fuerte, más hombres se van sumando a los que será una batalla feroz por echar a los ingleses.",
@@ -36,11 +42,12 @@ dbServices.factory('lineaPrueba', function(){
 				src: "/images/user/invasion-inglesa02.jpg"
 			}]
 		},{
-			titulo: "Primera Invasión Inglesa IV",
+			titulo: "Deposición de Sobremonte. Interinato de Liniers.",
 			icono: "cabildo-sm.png",
 			coordenadas: [-58.37, -34.60, 12],
+			fecha: "Fines de Agosto de 1806",
 			imagenes: [{
-				titulo: "Santiago Liniers: lider de la reconquista",
+				titulo: "Santiago Liniers: Virrey interino",
 				contenido: "El Cabildo designa Virrey a Liniers, en lo que fue la primera decisión sin el aval de la corona española.",
 				src: "/images/user/liniers.jpg"
 			}]
