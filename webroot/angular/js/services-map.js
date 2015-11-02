@@ -16,6 +16,14 @@ mapServices.factory('MapInstance', function(view, osmLayer,doZoom, flyTo, addOve
 		doZoom(Map.map, zoom);
 	};
 	
+	Map.zoomIn = function(){
+		Map.doZoom(Map.map.getView().getZoom()+1);
+	}
+	
+	Map.zoomOut = function(){
+		Map.doZoom(Map.map.getView().getZoom()-1);
+	}
+	
 	Map.flyTo = function(coordenadas){
 		Map.map.once('moveend', function(){
 	    	Map.moveEndEvent();
@@ -30,6 +38,8 @@ mapServices.factory('MapInstance', function(view, osmLayer,doZoom, flyTo, addOve
 	Map.removeOverlay = function(overlayAdded){
 		removeOverlay(Map.map, overlayAdded);
 	}
+	
+	
 	
 	Map.moveEndEvent = function(){ console.log("moveend")};
 	

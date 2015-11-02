@@ -138,20 +138,24 @@ app.controller('appCtrl', function($scope, $window, lineaPrueba, $interval) {
 	});
 	
 	$scope.zoomIn = function(){
-		$scope.zoom++;
+//		$scope.zoom++;
+		$scope.$broadcast('zoomIn', {});
+		$scope.mapScope.zoomIn();
 	};
 	$scope.zoomOut = function(){
-		$scope.zoom--;		
+//		$scope.zoom--;
+		$scope.$broadcast('zoomOut', {});
+		$scope.mapScope.zoomOut();
 	};
-	$scope.$watch('zoom', function(newValue){
-		console.log("zoom "+newValue);
-		$scope.mapScope.setZoom($scope.zoom);
-		$scope.$broadcast('zoom', newValue);
-	});
+//	$scope.$watch('zoom', function(newValue){
+//		console.log("zoom "+newValue);
+//		$scope.mapScope.setZoom($scope.zoom);
+//		$scope.$broadcast('zoom', newValue);
+//	});
 	
-	$scope.doZoom = function(zoom) {
-		$scope.$broadcast('zoom', zoom);
-	}
+//	$scope.doZoom = function(zoom) {
+//		$scope.$broadcast('zoom', zoom);
+//	}
 
 });
 
@@ -199,9 +203,19 @@ app.controller('mapCtrl', function($scope, $window) {
 	
 	
 	
+	$scope.zoomIn = function(){
+		$scope.$broadcast('zoomIn', {});
+	};
+	$scope.zoomOut = function(){
+		$scope.$broadcast('zoomOut', {});
+	}
+	
+	
 	$scope.setZoom = function(zoom){
 		$scope.$broadcast('zoom', zoom);
-	}	
+	}
+	
+	
 	$scope.nextSlide = function() {
 		$scope.$broadcast('nextSlide');
 	}

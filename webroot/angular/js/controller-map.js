@@ -8,6 +8,14 @@ mapControllers.controller("mapController", function($scope, MapInstance) {
 		MapInstance.doZoom(newZoom);
 	});
 	
+	$scope.$on('zoomIn', function(e){
+		MapInstance.zoomIn();
+	});
+	
+	$scope.$on('zoomOut', function(e){
+		MapInstance.zoomOut();
+	});
+	
 	$scope.$on('flyTo', function(e, coordenadas) {
 		MapInstance.flyTo(coordenadas);
 	});
