@@ -44,9 +44,17 @@
 
 <body ng-app="app" ng-controller="appCtrl" id='controlRoot'>
 	<ng-include src="resources.controlSidebar"></ng-include>
+
+	<div class="col-sm-5 col-sm-offset-5 col-md-5 col-md-offset-4 main ">
+		<ul class="nav navbar-inverse nav-sidebar">
+			<li class="active"><a href="#">{{linea.titulo}} <span class="sr-only">(current)</span></a></li>
+			<li ng-repeat="acontecimiento in acontecimientosCercanos"><kn-acontecimiento acontecimiento="acontecimiento"></kn-acontecimiento></li>
+		</ul>
+	</div>
+
 	<ng-include src="resources.controlFooter"></ng-include>
 
-	<div class="col-sm-9 col-sm-offset-4 col-md-9 col-md-offset-3 main">
+	<div class="col-sm-8 col-sm-offset-5 col-md-8 col-md-offset-4 main">
 		<div class="col-xs-12">
 			<ng-include src="resources.detailPane"></ng-include>
 		</div>

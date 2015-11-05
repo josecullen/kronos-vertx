@@ -3,7 +3,7 @@
 var app = angular.module('app', [ 'componentsModule','ngAnimate', 'commonDirectives',
 		'mapControllers', 'mapServices', 'kronosDirectives', 'dbServices', 'jc-carousel' ]);
 
-app.controller('appCtrl', function($scope, $window, lineaPrueba, $interval) {
+app.controller('appCtrl', function($scope, $window, lineaPrueba, $interval, acontecimientosCercanos) {
 	$scope.resources = {
 		controlFooter : "angular/partials/control-footer.html",
 		controlSidebar : "angular/partials/control-sidebar.html",
@@ -13,6 +13,7 @@ app.controller('appCtrl', function($scope, $window, lineaPrueba, $interval) {
 	$scope.zoom = 6; 
 	$scope.linea = lineaPrueba;
 	$scope.acontecimientos = lineaPrueba.acontecimientos;
+	$scope.acontecimientosCercanos;
 	$scope.mapWindow;
 	$scope.mapScope;
 	$scope.acontecimientoOverlay;	
@@ -129,33 +130,43 @@ app.controller('appCtrl', function($scope, $window, lineaPrueba, $interval) {
 				}				
 			}
 		}
-
 	}
 	
+	$scope.setStamen = function(){
+		$scope.$broadcast('setLayer', 'stamen');
+		$scope.mapScope.setStamen();
+	}
+	$scope.setOsm = function(){
+		$scope.$broadcast('setLayer', 'osm');
+		$scope.mapScope.setOsm();
+	}
+	
+//	$scope.linkFromPresentationMap = function(){
+//		
+//	};
+//	$scope.linkToPresentationMap = function(){
+//		$scope.$broadcast('getCenter', function(center, zoom){
+//			console.log("fly to center");
+//			console.log(center);
+//			console.log(zoom);
+//			$scope.mapScope.flyTo(center);
+//			$scope.mapScope.setZoom(zoom);
+//		});
+//	};
 	
 	$scope.$on('setAcontecimiento', function(e, acontecimiento) {
 		$scope.acontecimiento = acontecimiento;
+		$scope.acontecimientosCercanos = acontecimientosCercanos(acontecimiento.fecha);
 	});
 	
 	$scope.zoomIn = function(){
-//		$scope.zoom++;
 		$scope.$broadcast('zoomIn', {});
 		$scope.mapScope.zoomIn();
 	};
 	$scope.zoomOut = function(){
-//		$scope.zoom--;
 		$scope.$broadcast('zoomOut', {});
 		$scope.mapScope.zoomOut();
 	};
-//	$scope.$watch('zoom', function(newValue){
-//		console.log("zoom "+newValue);
-//		$scope.mapScope.setZoom($scope.zoom);
-//		$scope.$broadcast('zoom', newValue);
-//	});
-	
-//	$scope.doZoom = function(zoom) {
-//		$scope.$broadcast('zoom', zoom);
-//	}
 
 });
 
@@ -163,7 +174,6 @@ app.controller('mapCtrl', function($scope, $window) {
 	$scope.resources = {
 		controlFooter : "angular/partials/control-footer.html",
 		controlSidebar : "angular/partials/control-sidebar.html",
-//		carousel : "angular/partials/carousel.html"
 	}
 	$scope.controlScope = window.opener.angular.element('#controlRoot').scope();
 	$scope.tituloLinea = "";
@@ -195,6 +205,13 @@ app.controller('mapCtrl', function($scope, $window) {
 		$scope.carousel.toggleCarousel = false;
 		$scope.$broadcast('toggleCarousel',	$scope.carousel.toggleCarousel);
 	}
+	
+	$scope.setStamen = function(){
+		$scope.$broadcast('setLayer', 'stamen');
+	}
+	$scope.setOsm = function(){
+		$scope.$broadcast('setLayer', 'osm');
+	}
 
 	
 	$scope.showAcontecimientoInfo = function(){	
@@ -208,12 +225,10 @@ app.controller('mapCtrl', function($scope, $window) {
 	};
 	$scope.zoomOut = function(){
 		$scope.$broadcast('zoomOut', {});
-	}
-	
-	
+	}	
 	$scope.setZoom = function(zoom){
 		$scope.$broadcast('zoom', zoom);
-	}
+	}	
 	
 	
 	$scope.nextSlide = function() {

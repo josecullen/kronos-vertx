@@ -16,7 +16,12 @@ mapControllers.controller("mapController", function($scope, MapInstance) {
 		MapInstance.zoomOut();
 	});
 	
+	$scope.$on('setLayer', function(e, newLayer) {
+		MapInstance.setLayer(newLayer);
+	});
+	
 	$scope.$on('flyTo', function(e, coordenadas) {
+		console.log(coordenadas);
 		MapInstance.flyTo(coordenadas);
 	});
 	
@@ -33,6 +38,10 @@ mapControllers.controller("mapController", function($scope, MapInstance) {
 	
 	$scope.$on('setMoveEnd', function(e, newMoveEndEvent){
 		MapInstance.moveEndEvent = newMoveEndEvent;
+	});
+	
+	$scope.$on('getCenter', function(e, callback){
+		callback(MapInstance.view.getCenter(), MapInstance.view.getZoom());
 	});
 
 });
