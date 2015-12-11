@@ -1,6 +1,6 @@
 var mapServices = angular.module('mapServices', ['mapControlServices']);
 
-mapServices.factory('MapInstance', function(view, osmLayer, stamenLayer,doZoom, flyTo, addOverlay, removeOverlay){
+mapServices.factory('MapInstance', function(view, osmLayer, stamenLayer, localMaps, doZoom, flyTo, addOverlay, removeOverlay){
 	var Map = {};	
 	
 	Map.view = view;
@@ -8,7 +8,7 @@ mapServices.factory('MapInstance', function(view, osmLayer, stamenLayer,doZoom, 
 	Map.map = new ol.Map({
 		target: 'map',
 		controls: [],
-		layers: [stamenLayer],
+		layers: [localMaps],
 		view: Map.view
 	});
 		
@@ -41,7 +41,9 @@ mapServices.factory('MapInstance', function(view, osmLayer, stamenLayer,doZoom, 
 	
 	Map.setLayer = function(layer){
 		Map.map.removeLayer(Map.map.getLayers()[0]);
-		if(layer == 'stamen'){
+		if(layer == 'local'){
+			Map.map.addLayer(localMaps);
+		}else if(layer == 'stamen'){
 			Map.map.addLayer(stamenLayer);
 		}else{
 			Map.map.addLayer(osmLayer);
@@ -97,4 +99,13 @@ mapServices.factory('stamenLayer', function(){
 	return stamenLayer;
 });
 
+mapServices.factory('localMaps', function(){
+	var newLayer = new ol.layer.Tile({
+        source: new ol.source.OSM({
+          url: 'C:\\Users\\jcullen\\osm\\osm\\{z}\\{x}\\{y}.png'
+        })
+    });
+	return newLayer;
+});
 
+//'/images/watercolor/{z}/{x}/{y}.png'

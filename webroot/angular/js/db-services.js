@@ -125,6 +125,7 @@ dbServices.factory('otrasLineas', function(){
 				titulo: "Goethe termina Fausto",
 				icono: "carruaje-sm.png",
 				fecha: new Date(1806, 5,8),
+				coordenadas: [ 11.051,50.861, 10],
 				imagenes:[{
 					titulo: "Goethe termina Fausto",
 					contenido: "La mejor obra dramática de Goethe es sin duda el Fausto, que ha pasado a ser una obra clásica de la Literatura Universal. La primera versión, el Urfaust o Fausto original, estaba acabada en 1773. Pero el autor la siguió retocando hasta 1790; ya en abril de 1806 estaba completo, pero las guerras napoleónicas demoraron dos años la publicación hasta 1808",
